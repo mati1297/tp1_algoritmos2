@@ -3,7 +3,7 @@
 #include <cmath>
 
 using namespace std;
-
+/*contructores: base , con parametros y copia, usados en la teorica*/
 complejo::complejo() : re_(0), im_(0)
 {
 }
@@ -19,7 +19,7 @@ complejo::complejo(double r, double i) : re_(r), im_(i)
 complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_)
 {
 }
-
+/* operadores para suma, resta, multiplicacion*/
 complejo const &
 complejo::operator=(complejo const &c)
 {
@@ -110,7 +110,7 @@ complejo::zero() const
 #define ZERO(x) ((x) == +0.0 && (x) == -0.0)
 	return ZERO(re_) && ZERO(im_) ? true : false;
 }
-
+/*sobrecarga de operadores para suma, resta multiplicacion*/
 complejo const
 operator+(complejo const &x, complejo const &y)
 {
@@ -169,6 +169,43 @@ operator<<(ostream &os, const complejo &c)
 	          << ")";
 }
 
+
+/*Solo lee con formato (re,im) y lo guarda en c*/
+istream &
+operator>>(istream &is, complejo &c)
+{
+	int good = false;
+	int bad  = false;
+	double re = 0;
+	double im = 0;
+	char ch = 0;
+
+	if (is >> ch
+	    && ch == '(') {
+		if (is >> re
+		    && is >> ch
+		    && ch == ','
+		    && is >> im
+		    && is >> ch
+		    && ch == ')')
+			good = true;
+		else
+			bad = true;
+	} else if (is.good()) {
+		is.putback(ch);
+		if (is >> re)
+			good = true;
+		else
+			bad = true;
+	}
+
+	if (good)
+		c.re_ = re, c.im_ = im;
+	if (bad)
+		is.clear(ios::badbit);
+
+	return is;
+}
 
 
 
