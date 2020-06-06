@@ -18,9 +18,9 @@ public:
 
 	double re() const;
 	double im() const;
-	double abs() const;
-	double abs2() const;
-   double get_phase(const complejo  & c) const;
+	double modulo() const;
+	double modulo2() const;
+   	double fase(const complejo  & c) const;
 	complejo const &conjugar();
 	complejo const conjugado() const;
 	bool zero() const;
