@@ -88,9 +88,9 @@ complejo::modulo2() const
 }
 
 double
-complejo::fase(const complejo & c) const
+complejo::fase() const
 {
-    return atan2(c.re_,c.im_);
+    return atan2(re_,im_);
 }
 
 
@@ -303,5 +303,162 @@ int i = 0;
 
 	return c;
 }	
+*/
+
+
+/*No se si esta bien devovler un compljeo de la misma forma pero con modulo en re_ y fase en im_
+complejo const
+
+complejo::expc() const
+
+{
+	double mod,fase;
+	mod = exp(re_)*cos(im_);
+	fase = exp(re_)*sin(im_);
+
+	return complejo(mod,fase);	
+
+}
+
+complejo const
+
+complejo::logc() const
+
+{
+	double mod, ang;
+	mod= (*this).modulo();
+	ang= (*this).fase();
+
+
+	return complejo(mod, ang);
+
+}
+
+*/
+
+
+/*
+
+
+
+complejo complejo::sumar(const complejo & r)
+
+{
+
+return complejo(re_+r.re_, im_+r.im_);
+
+}
+
+
+
+complejo complejo::sumar (double f) {
+
+return complejo (re_+f,im_);
+
+}
+
+
+
+void SetReal(double xx)
+
+{
+
+re_=xx;
+
+}
+
+void SetImag(double yy){
+
+im_=yy;
+
+} 
+
+
+
+complejo 
+
+complejo::operator+ (const complejo & r) 
+
+{
+
+return complejo(re_ + r.re_ , im_ + r.im_);
+
+}
+
+complejo complejo:: operator+ (double f)
+
+{
+
+ return complejo (re_+f,im_);
+
+}
+
+
+
+complejo complejo::restar(const complejo & r)
+
+{
+
+return complejo(re_-r.re_, im_-r.im_);
+
+}
+
+
+
+complejo complejo::restar(double f) {
+
+return complejo (re_-f,im_);
+
+}
+
+
+
+
+
+complejo 
+
+complejo::operator- (const complejo & r) 
+
+{
+
+return complejo(re_ - r.re_ , im_ - r.im_);
+
+}
+
+complejo complejo:: operator- (double f)
+
+{
+
+ return complejo (re_-f,im_);
+
+}
+
+
+
+complejo const
+
+complejo::operator*(complejo const &x)
+
+{
+
+	complejo r(x.re_ * re_ - x.im_ * im_,
+
+	          x.re_ * im_ + x.im_ * re_);
+
+	return r;
+
+}
+
+
+
+complejo const
+
+complejo::operator/(complejo const &y)
+
+{
+
+	return *this * y.conjugado() / y.modulo2();
+
+}
 */
 
