@@ -20,7 +20,7 @@ public:
 	double im() const;
 	double modulo() const;
 	double modulo2() const;
-   	double fase(const complejo  & c) const;
+   	double fase() const;
 	complejo const &conjugar();
 	complejo const conjugado() const;
 	bool zero() const;
