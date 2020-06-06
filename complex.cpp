@@ -1,6 +1,9 @@
 #include "complex.hpp"
 #include <iostream>
 #include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
 
 using namespace std;
 /*contructores: base , con parametros y copia, usados en la teorica*/
@@ -73,19 +76,19 @@ double complejo::im() const
 }
 
 double
-complejo::abs() const
+complejo::modulo() const
 {
 	return std::sqrt(re_ * re_ + im_ * im_);
 }
 
 double
-complejo::abs2() const
+complejo::modulo2() const
 {
 	return re_ * re_ + im_ * im_;
 }
 
 double
-complejo::get_phase(const complejo & c) const
+complejo::fase(const complejo & c) const
 {
     return atan2(c.re_,c.im_);
 }
@@ -107,8 +110,7 @@ complejo::conjugado() const
 bool
 complejo::zero() const
 {
-#define ZERO(x) ((x) == +0.0 && (x) == -0.0)
-	return ZERO(re_) && ZERO(im_) ? true : false;
+	return ( (re_ ==0) && (im_==0) ) ? true : false;
 }
 /*sobrecarga de operadores para suma, resta multiplicacion*/
 complejo const
@@ -136,7 +138,7 @@ operator*(complejo const &x, complejo const &y)
 complejo const
 operator/(complejo const &x, complejo const &y)
 {
-	return x * y.conjugado() / y.abs2();
+	return x * y.conjugado() / y.modulo2();
 }
 
 complejo const
@@ -170,7 +172,7 @@ operator<<(ostream &os, const complejo &c)
 }
 
 
-/*Solo lee con formato (re,im) y lo guarda en c*/
+/*Solo lee con formato (re,im) y lo guarda en c
 istream &
 operator>>(istream &is, complejo &c)
 {
@@ -206,10 +208,58 @@ operator>>(istream &is, complejo &c)
 
 	return is;
 }
+*/
+/*Version para complejo de formato re + im 'j'*/
+istream &
+operator>>(istream &is, complejo &c)
+{
+	int good = false;
+	int bad  = false;
+	double re = 0,im = 0,num=0;
+	char* ch = 0;
+	string input, str;
+
+   if(!getline(is, input) );
+		bad = true;
+
+   for(int i = 0; i < int(input.length()); i++)
+	{
+   	if(!isspace(input[i]))
+	      str += input[i];
+   }
+	if (( num =strtod(&str[0],&ch) ))
+	{
+		if(*ch=='j')
+		{
+			im = num;
+			if( (num = strtod(ch,&ch) ) )
+				re = num;
+		}
+	re = num;
+
+	if (( num =strtod(ch,&ch)) )
+	{
+		if( *ch != 'j' )
+			bad = true;
+		im = num;
+	}
+
+	good = true;	
+	}
+
+	if (good)
+		c.re_ = re, c.im_ = im;
+	if (bad)
+		is.clear(ios::badbit);
+	return is;
+	
+}
 
 
 
-/*
+
+
+/* version para mas de 2 terminos
 complejo & strtoc(istream &is, complejo & c)
 {
 double numero,real =0,imag=0;
