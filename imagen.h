@@ -38,7 +38,7 @@ enum funcion_t { Z = 0,  EXPONENCIAL, CUADRADO};
 /* Clase Imagen
  * Clase que reprensenta a una imagen PGM. Con sus atributos:
  * filas, columnas, intensidad, y la propia imagen,
- * un vector de vectores que forman una matriz con los valores de la 
+ * un vector de vectores que forman una matriz con los valores de la
  * imagen para cada pixel.
 */
 class Imagen{
@@ -47,15 +47,6 @@ private:
   int columnas;
   int intensidad;
   std::vector<std::vector<int> > matriz = std::vector<std::vector<int> >(FILAS_DEF);
-  
-  /* Transforma la imagen en ella misma */
-    Imagen transf_z() const;
-    
-    /* Realiza la transformación exponencial */
-  Imagen transf_exp() const;
-  
-  /* Realiza la transformacion z cuadrado */
-  Imagen transf_cuadrado() const;
 
 public:
   /*Constructor por defecto del objeto Imagen.
@@ -63,7 +54,7 @@ public:
   * COLUMNAS_DEF y FILAS_DEF. Se asume que no hay error al hacer el resize
   * al ser la cantidad por defecto un valor chico.*/
   Imagen();
-  
+
   /*Constructor del objeto imagen.
   * Se le pasa: cantidad de filas, columnas, el valor maximo
   * de intensidad, y el valor con que se quiere rellenar la imagen
@@ -71,39 +62,39 @@ public:
   * En caso de haber un error al hacer el resize, se crea la matriz
   * con COLUMNAS_DEF Y FILAS_DEF.*/
   Imagen(int, int, int, int);
-  
+
   /* Constructor por copia.*/
   Imagen(const Imagen&);
-  
+
   /*Destructor del objeto imagen.*/
   ~Imagen();
-  
+
   /*Operador de copia*/
   Imagen& operator=(const Imagen&);
-  
+
   /* Operador de comparacion */
-  bool operator==(const Imagen&) const; 
-  
+  bool operator==(const Imagen&) const;
+
   /* Operador de comparacion */
   bool operator!=(const Imagen&) const;
-  
+
   /*Getter para cantidad de filas*/
-  int getFilas() const;  
-  
+  int getFilas() const;
+
   /*Getter para cantidad de columnas*/
   int getColumnas() const;
-  
+
   /*Getter para intensidad maxima*/
   int getIntensidad() const;
-  
-  /* Metodo que transforma la imagen. Elige a partir de la variable de 
-  * tipo enumerativo funcion_t que transformacion realizar. 
+
+  /* Metodo que transforma la imagen. Elige a partir de la variable de
+  * tipo enumerativo funcion_t que transformacion realizar.
   * Ninguna de las funciones transforma la imagen de la que la funcion es metodo,
   * sino que devuelve la imagen transformada para ser guardada en una nueva o en ella
   * misma.*/
   Imagen transformar(funcion_t) const;
-  
-  
+
+
   /* Metodo para cargar una imagen a partir de un archivo PGM.
   * Si encuentra un error imprime un mensaje y cierra el programa.
   * Al leer, el metodo ignora todos los comentarios (que comienzan
@@ -111,7 +102,7 @@ public:
   * que pueda haber al comienzo de una linea. Si una linea está totalmente
   * vacia se tomará como un error. */
   int readPGM(std::istream&);
-  
+
   /* Se guarda el objeto imagen en un archivo ".pgm". La cantidad de numeros
   * por linea esta dado por la macro NUMEROS_LINEA_SALIDA.*/
   void savePGM(std::ostream&);

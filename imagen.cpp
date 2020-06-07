@@ -100,57 +100,6 @@ Imagen Imagen::transformar(funcion_t f) const{
   }
 }
 
-Imagen Imagen::transf_z() const{
-  Imagen aux = *this;
-  return aux;
-}
-
-
-Imagen Imagen::transf_exp() const{
-  Imagen aux = Imagen(filas, columnas, intensidad, VALOR_DEF);
-  double x_0, y_0, x, y;
-  x_0 = columnas/2;
-  y_0 = filas/2;
-
-  for (int i = 0; i < filas; i++) {
-    for (int j = 0; j < columnas; j++) {
-        x = x_0 * (1 + (exp(j/x_0-1)*cos(1-i/y_0)));
-        y = y_0 *  (1 - (exp(j/x_0-1)*sin(1-i/y_0)));
-
-        if ((x < 0) || (x >= columnas) || (y < 0) || (y >= filas)) {
-          aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
-        }
-
-        else
-          aux.matriz[i][j] = matriz[y][x];
-    }
-  }
-
-  return aux;
-}
-
-
-Imagen Imagen::transf_cuadrado() const{
-  Imagen aux = Imagen(filas, columnas, intensidad, VALOR_DEF);
-  double x_0, y_0, x, y;
-  x_0 = columnas/2;
-  y_0 = filas/2;
-
-  for (int i = 0; i < filas; i++) {
-    for (int j = 0; j < columnas; j++) {
-      x = x_0 * (1 + ((j/x_0-1)*(j/x_0-1)-(1-i/y_0)*(1-i/y_0)));
-       y = y_0 *  (1 - (2*(j/x_0-1)*(1-i/y_0)));
-
-      if ((x < 0) || (x >= columnas) || (y < 0) || (y >= filas))
-        aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
-      else {
-        aux.matriz[i][j] = this->matriz[y][x];}
-    }
-  }
-
-  return aux;
-}
-
 int Imagen::readPGM(std::istream& input){
   std::string line;
   int pos_space;
@@ -200,14 +149,14 @@ int Imagen::readPGM(std::istream& input){
     std::cerr << MSJ_ERROR_FILAS << std::endl;
     return(EXIT_FAILURE);
   }
-  
+
   if(filas <= 0 || columnas <= 0){
     std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
     return(EXIT_FAILURE);
   }
-  
+
   //Se hace el resize de las filas y columnas.
-  
+
   try{
     matriz.resize(filas);
   }
@@ -215,7 +164,7 @@ int Imagen::readPGM(std::istream& input){
     std::cerr << MSJ_ERROR_MEMORIA << std::endl;
     return(EXIT_FAILURE);
   }
-  
+
   for(int i = 0; i < filas; i++){
     try{
       matriz[i].resize(columnas);
