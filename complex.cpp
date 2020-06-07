@@ -1,11 +1,20 @@
-#include "complex.hpp"
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include "complex.h"
 
 using namespace std;
+
+int main(void){
+  complejo a(1,2);
+  complejo b(3,1);
+  complejo c = a + b;
+  cout << c << endl;
+  return 0;
+}
+
 /*contructores: base , con parametros y copia, usados en la teorica*/
 complejo::complejo() : re_(0), im_(0)
 {
@@ -219,7 +228,7 @@ operator>>(istream &is, complejo &c)
 	char* ch = 0;
 	string input, str;
 
-   if(!getline(is, input) );
+   if(!getline(is, input) )
 		bad = true;
 
    for(int i = 0; i < int(input.length()); i++)
