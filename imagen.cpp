@@ -81,23 +81,8 @@ int Imagen::getIntensidad() const{
   return intensidad;
 }
 
-Imagen Imagen::transformar(funcion_t f) const{
-  switch(f) {
-    case Z:
-      return this->transf_z();
-      break;
-    case EXPONENCIAL:
-      return this->transf_exp();
-      break;
-    case CUADRADO:
-      return this->transf_cuadrado();
-      break;
-    default:
-      return this->transf_z(); //si pasan una funcion que no existe, devuelve la misma imagen
-      break;
-    break;
-      return *this;
-  }
+Imagen Imagen::transformar() const{
+
 }
 
 int Imagen::readPGM(std::istream& input){

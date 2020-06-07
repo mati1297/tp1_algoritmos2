@@ -31,10 +31,6 @@
 #define MSJ_ERROR_INTENSIDAD_INVALIDA "Error en intensidad máxima, debe ser mayor que 0"
 #define MSJ_ERROR_TAMANO_INVALIDO "Error en el tamaño, uno de los ejes es 0 o menor"
 
-// Tipo enumerativo utilizado para decidir que funcion usar.
-enum funcion_t { Z = 0,  EXPONENCIAL, CUADRADO};
-
-
 /* Clase Imagen
  * Clase que reprensenta a una imagen PGM. Con sus atributos:
  * filas, columnas, intensidad, y la propia imagen,
@@ -92,7 +88,7 @@ public:
   * Ninguna de las funciones transforma la imagen de la que la funcion es metodo,
   * sino que devuelve la imagen transformada para ser guardada en una nueva o en ella
   * misma.*/
-  Imagen transformar(funcion_t) const;
+  Imagen transformar() const;
 
 
   /* Metodo para cargar una imagen a partir de un archivo PGM.
