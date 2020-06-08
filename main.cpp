@@ -44,8 +44,6 @@ int main(int argc, char * const argv[]) {
   //de salida (por constructor por copia).
   Imagen imagen_output = imagen_input.transformar(funcion);
 
-  std::cout<<"Llegue al main despues de transformar OwO"<<std::endl;
-
   imagen_output.savePGM(*output_);//Se guarda la nueva imagen en un pgm.
   //Se cierran los archivos.
   input_file_->close();

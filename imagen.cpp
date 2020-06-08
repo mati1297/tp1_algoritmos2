@@ -120,11 +120,11 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
           if (s_aux == "+") {
             l_aux.push(c_aux+l_aux.pop());
           } else if (s_aux == "-") {
-            l_aux.push(c_aux-l_aux.pop());
+            l_aux.push(l_aux.pop()-c_aux);
           } else if (s_aux == "*") {
             l_aux.push(c_aux*l_aux.pop());
           } else if (s_aux == "/") {
-            l_aux.push(c_aux/l_aux.pop());
+            l_aux.push(l_aux.pop()/c_aux);
           } else if (s_aux == "^") {
             l_aux.push(c_aux^l_aux.pop());
           }
