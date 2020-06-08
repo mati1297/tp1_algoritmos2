@@ -9,37 +9,37 @@ template <typename T>
 class lista{
 	class nodo{
 		friend class lista;
-		
+
 		nodo* sig;
 		nodo* ant;
 		T dato;
-		
+
 	public:
 		nodo();
 		nodo(const T&);
 		~nodo();
 	};
-	
+
 	nodo* pri;
 	nodo* ult;
 	size_t tam;
-	
+
 public:
 
 	class iterador{
 		friend class lista;
-		
+
 		nodo *actual;
 		iterador(nodo*);
-		
+
 	public:
 		//Constructores
 		iterador(); //Por defecto
 		iterador(const lista<T>&); //Inicializa a principio de lista
 		iterador(const iterador&); //Por copia
-		
+
 		~iterador();
-	
+
 		T& dato(); //Devuelve dato de nodo actual
 		const T& dato() const; //Devuelve dato de nodo actual
 		iterador &avanzar(); //Avanza al nodo siguiente
@@ -49,7 +49,7 @@ public:
 		bool operator==(const iterador&) const;
 		bool operator!=(const iterador&) const;
 		const iterador& operator=(iterador const&);
-		
+
 
 	};
 
@@ -61,9 +61,9 @@ public:
 	//Constructores
 	lista(); //Defecto
 	lista(const lista&); //Copia lista
-	
+
 	~lista();
-	
+
 	bool vacia() const; //Chequea si esta vacia
 	bool llena() const; //Chequea si esta llena
 	size_t getTamano() const; //Devuelve el tamano
@@ -72,10 +72,10 @@ public:
 	T pop(); //Extrae el dato del principio de la lista
 	void enqueue(const T&); //Agrega un dato al principio de la lista
 	T dequeue(); //Extrae el dato del final de la lista
-	
+
 	iterador primero() const; //Devuelve un iterador al principio de la lista
 	iterador ultimo() const; //Devuelve un iterador al final de la lista
-	
+
 	template<typename U> friend std::ostream& operator<<(std::ostream&, const lista<U>&);
 };
 
@@ -165,6 +165,7 @@ const typename lista<T>::iterador& lista<T>::iterador::operator=(const typename 
 	if(*this != orig){
 		actual = orig.actual;
 	}
+	return *this;
 }
 
 
@@ -182,21 +183,21 @@ lista<T>::lista(const lista& orig){
 	pri = 0;
 	ult = 0;
 	tam = orig.tam;
-	
+
 	for(p = orig.pri, ant = 0; p; p = p->sig){
 		nodo* nuevo = new nodo(p->dato);
 		nuevo->ant = ant;
 		nuevo->sig = 0;
-		
+
 		if(ant)
 			ant->sig = nuevo;
-			
-			
+
+
 		if(!pri)
 			pri = nuevo;
-			
+
 		ant = nuevo;
-	} 
+	}
 	ult = ant;
 }
 
@@ -230,7 +231,7 @@ void lista<T>::push(const T& dato_){
 	nodo* aux = new nodo(dato_);
 	aux->ant = 0;
 	aux->sig = pri;
-	
+
 	if(pri)
 		pri->ant = aux;
 	pri = aux;
@@ -251,7 +252,7 @@ T lista<T>::pop(){
 		ult = 0;
 	else
 		pri->ant = 0;
-		
+
 	tam--;
 	delete p;
 	return dato_;
@@ -269,7 +270,7 @@ void lista<T>::enqueue(const T& dato_){
 	nodo * aux = new nodo(dato_);
 	aux->sig = 0;
 	aux->ant = ult;
-	
+
 	if(ult)
 		ult->sig = aux;
 	ult = aux;
@@ -283,15 +284,15 @@ T lista<T>::dequeue(){
 	if(tam < 1)
 		throw std::logic_error("");
 	T dato_ = ult->dato;
-	
+
 	nodo* p = ult;
 	ult = p->ant;
-	
+
 	if(!ult)
 		pri = 0;
 	else
 		ult->sig = 0;
-		
+
 	tam--;
 	delete p;
 	return dato_;
@@ -304,9 +305,9 @@ std::ostream& operator<<(std::ostream& os, const lista<T>& l){
 		os << "Lista vacia";
 		return os;
 	}
-	
+
 	typename lista<T>::iterador it(l);
-	
+
 	while(!it.extremo()){
 		os << it.dato() << " ";
 		it.avanzar();

@@ -1,6 +1,9 @@
 #ifndef IMAGEN_H
 #define IMAGEN_H
 
+#include "lista.h"
+#include "complejo.h"
+
 #include <cmath>
 #include <vector>
 #include <fstream>
@@ -83,13 +86,7 @@ public:
   /*Getter para intensidad maxima*/
   int getIntensidad() const;
 
-  /* Metodo que transforma la imagen. Elige a partir de la variable de
-  * tipo enumerativo funcion_t que transformacion realizar.
-  * Ninguna de las funciones transforma la imagen de la que la funcion es metodo,
-  * sino que devuelve la imagen transformada para ser guardada en una nueva o en ella
-  * misma.*/
-  Imagen transformar() const;
-
+  Imagen transformar(const lista<string>) const;
 
   /* Metodo para cargar una imagen a partir de un archivo PGM.
   * Si encuentra un error imprime un mensaje y cierra el programa.

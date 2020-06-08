@@ -21,7 +21,7 @@ bool izqAsoc(string);
 string leerToken(string, string*, size_t);
 int precedencia(string);
 string leerNumero(string);
-string quitarEspaciosInicio(string); //ver que hacer con esta
+string quitarEspaciosInicio_matichotoaprendeaprogramar(string); //ver que hacer con esta
 
 
 #endif

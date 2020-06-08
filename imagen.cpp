@@ -1,4 +1,6 @@
 #include "imagen.h"
+#include "lista.h"
+#include "complejo.h"
 
 #include <cmath>
 #include <vector>
@@ -81,9 +83,102 @@ int Imagen::getIntensidad() const{
   return intensidad;
 }
 
-Imagen Imagen::transformar() const{
+Imagen Imagen::transformar(const lista<string> funcion) const{
+  Imagen im_aux = Imagen(filas, columnas, intensidad, VALOR_DEF);
+  double x, y, x_0 = columnas/2, y_0 = filas/2;
+  // Inicializo el iterador al principio de la lista (sabiendo que ya es correcta y fue validada antes)
+  lista<string>::iterador it = lista<string>::iterador(funcion);
+  lista<complejo> l_aux;
+  string s_aux;
+  complejo c_aux;
 
+  for(int i = 0; i < filas;i++) {
+    for(int j=0;j<columnas;j++){
+      // aplico la transformacion lineal para mapear al rectangulo de lado 2
+      x = j/x_0-1;
+      y = 1-i/y_0;
+
+      // inicializo el iterador
+      it = funcion.primero();
+
+      // realizo el algoritmo de evaluacion con la funcion dada por la lista
+      // El dato puede ser 'z' 'j' 'numero' 'operador' 'funcion'
+      while (it.extremo() != true) {
+        s_aux = it.dato();
+
+        if (isdigit(s_aux[0]) || (s_aux[0] == '.')) {
+          l_aux.push(complejo(stod(s_aux),0));
+        }
+        else if (s_aux == "z") {
+          l_aux.push(complejo(x,y));
+        }
+        else if (s_aux == "j") {
+          l_aux.push(complejo(0,1));
+        } // Veo si es un operador (largo 1)
+        else if (s_aux.length() == 1){
+          c_aux = l_aux.pop();
+          if (s_aux == "+") {
+            l_aux.push(c_aux+l_aux.pop());
+          } else if (s_aux == "-") {
+            l_aux.push(c_aux-l_aux.pop());
+          } else if (s_aux == "*") {
+            l_aux.push(c_aux*l_aux.pop());
+          } else if (s_aux == "/") {
+            l_aux.push(c_aux/l_aux.pop());
+          }
+        } // Realizo las funciones
+        else {
+          if (s_aux == "abs") {
+            l_aux.push(l_aux.pop().modulo());
+          }
+          else if (s_aux == "re"){
+            l_aux.push(l_aux.pop().re());
+          }
+          else if (s_aux == "im"){
+            l_aux.push(l_aux.pop().im());
+          }
+          else if (s_aux == "phase"){
+            l_aux.push(l_aux.pop().fase());
+          }
+          else if (s_aux == "exp"){
+            //l_aux.push(l_aux.pop().exp());
+          }
+          else if (s_aux == "ln"){
+            //l_aux.push(l_aux.pop().ln());
+          }
+          else if (s_aux == "sin"){
+            //l_aux.push(l_aux.pop().sin());
+          }
+          else if (s_aux == "cos"){
+            //l_aux.push(l_aux.pop().cos());
+          }
+        }
+        std::cout<<it.dato()<<endl;
+        // Avanzo al iterador
+        it = it.avanzar();
+      } // fin del while
+
+      if (l_aux.getTamano() != 1){
+        std::cout<<"(✿╹◡╹) <(Error la re concha de tu madre)"<<endl;
+      }
+      // El ultimo elemento que quedo en la lista aux. es el complejo resultado
+      c_aux = l_aux.pop();
+
+      // realizo la transformacion lineal inversa
+      x = (int) (x_0 * (1 + c_aux.re()));
+      y = (int) (y_0 * (1 - c_aux.im()));
+
+      if ((x < 0) || (x >= columnas) || (y < 0) || (y >= filas)){
+				im_aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
+			} else {
+				im_aux.matriz[i][j] = this->matriz[y][x];
+      }
+    }
+    std::cout<<"(Al parecer funciona)> ◕‿↼"<<endl;
+  }
+  return im_aux;
 }
+
 
 int Imagen::readPGM(std::istream& input){
   std::string line;
@@ -263,8 +358,6 @@ int Imagen::readPGM(std::istream& input){
   }
   return(EXIT_SUCCESS);
 }
-
-
 
 void Imagen::savePGM(std::ostream& output){
   output << PGM_INDICADOR << std::endl
