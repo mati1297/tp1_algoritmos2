@@ -1,19 +1,12 @@
+#include "complejo.h"
+
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include "complex.h"
 
 using namespace std;
-
-int main(void){
-  complejo a(1,2);
-  complejo b(3,1);
-  complejo c = a + b;
-  cout << c << endl;
-  return 0;
-}
 
 /*contructores: base , con parametros y copia, usados en la teorica*/
 complejo::complejo() : re_(0), im_(0)
@@ -121,6 +114,7 @@ complejo::zero() const
 {
 	return ( (re_ ==0) && (im_==0) ) ? true : false;
 }
+
 /*sobrecarga de operadores para suma, resta multiplicacion*/
 complejo const
 operator+(complejo const &x, complejo const &y)
@@ -173,9 +167,9 @@ operator==(complejo const &x, complejo const &y)
 ostream &
 operator<<(ostream &os, const complejo &c)
 {
-	return os << "(" 
+	return os << "("
 	          << c.re_
-	          << ", " 
+	          << ", "
 	          << c.im_
 	          << ")";
 }
@@ -253,7 +247,7 @@ operator>>(istream &is, complejo &c)
 		im = num;
 	}
 
-	good = true;	
+	good = true;
 	}
 
 	if (good)
@@ -261,12 +255,8 @@ operator>>(istream &is, complejo &c)
 	if (bad)
 		is.clear(ios::badbit);
 	return is;
-	
+
 }
-
-
-
-
 
 /* version para mas de 2 terminos
 complejo & strtoc(istream &is, complejo & c)
@@ -311,7 +301,7 @@ int i = 0;
 	c= complejo(real,imag);
 
 	return c;
-}	
+}
 */
 
 
@@ -325,7 +315,7 @@ complejo::expc() const
 	mod = exp(re_)*cos(im_);
 	fase = exp(re_)*sin(im_);
 
-	return complejo(mod,fase);	
+	return complejo(mod,fase);
 
 }
 
@@ -380,13 +370,13 @@ void SetImag(double yy){
 
 im_=yy;
 
-} 
+}
 
 
 
-complejo 
+complejo
 
-complejo::operator+ (const complejo & r) 
+complejo::operator+ (const complejo & r)
 
 {
 
@@ -424,9 +414,9 @@ return complejo (re_-f,im_);
 
 
 
-complejo 
+complejo
 
-complejo::operator- (const complejo & r) 
+complejo::operator- (const complejo & r)
 
 {
 
@@ -470,4 +460,3 @@ complejo::operator/(complejo const &y)
 
 }
 */
-
