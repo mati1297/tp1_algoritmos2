@@ -1,14 +1,9 @@
-#include "complejo.h"
-
+#include "complex.hpp"
 #include <iostream>
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
 
 using namespace std;
 
-/*contructores: base , con parametros y copia, usados en la teorica*/
 complejo::complejo() : re_(0), im_(0)
 {
 }
@@ -24,7 +19,7 @@ complejo::complejo(double r, double i) : re_(r), im_(i)
 complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_)
 {
 }
-/* operadores para suma, resta, multiplicacion*/
+
 complejo const &
 complejo::operator=(complejo const &c)
 {
@@ -66,6 +61,8 @@ complejo::~complejo()
 {
 }
 
+
+
 double
 complejo::re() const
 {
@@ -92,21 +89,11 @@ complejo::modulo2() const
 double
 complejo::fase() const
 {
-    return atan2(re_,im_);
-}
+	if(this->zero())
+		return 0;
 
-complejo const & complejo::seno() {
-	double aux = re_;
-	re_ = sin(re_) * cosh(im_);
-	im_ = cos(aux) * sinh(im_);
-	return *this;
-}
-
-complejo const & complejo::coseno() {
-	double aux = re_;
-	re_ = cos(re_) * cosh(im_);
-	im_ = -sin(aux) * sinh(im_);
-	return *this;
+    return atan2(re_,im_);//devuelve en grados
+//atan2 (y,x) * 180 / PI --> definir pi o usar el de la biblioteca
 }
 
 
@@ -126,56 +113,50 @@ complejo::conjugado() const
 bool
 complejo::zero() const
 {
-	return ( (re_ ==0) && (im_==0) ) ? true : false;
+#define ZERO(x) ((x) == +0.0 && (x) == -0.0)
+	return ZERO(re_) && ZERO(im_) ? true : false;
 }
 
-complejo const complejo::operator^(complejo const & pot) {
-	if (pot.im_ == 0) {
-		if (pot.re_ == 1)
-			return *this;
-		return *this^(pot-1); 
-	}
+
+complejo const
+complejo::operator+(const complejo & r) 
+{
+return complejo(this->re_ + r.re_ , this->im_ + r.im_);
+}
+
+
+complejo const 
+complejo::operator-(const complejo & r) 
+
+{
+
+return complejo(re_ - r.re_ , im_ - r.im_);
+
+}
+
+complejo const
+complejo::operator*(complejo const &x)
+{
+	complejo r(x.re_ * re_ - x.im_ * im_,
+	          x.re_ * im_ + x.im_ * re_);
+	return r;
+}
+
+complejo const
+complejo::operator/(complejo const &x)
+{
+	re_ = (re_*x.re_)/x.modulo2();
+	im_ = (im_*x.im_*-1)/x.modulo2();
+
 	return *this;
 }
 
-
-
-
-
-/*sobrecarga de operadores para suma, resta multiplicacion*/
 complejo const
-operator+(complejo const &x, complejo const &y)
+complejo::operator/(double f)
 {
-	complejo z(x.re_ + y.re_, x.im_ + y.im_);
-	return z;
+	return complejo(re_ / f, im_ / f);
 }
 
-complejo const
-operator-(complejo const &x, complejo const &y)
-{
-	complejo r(x.re_ - y.re_, x.im_ - y.im_);
-	return r;
-}
-
-complejo const
-operator*(complejo const &x, complejo const &y)
-{
-	complejo r(x.re_ * y.re_ - x.im_ * y.im_,
-	          x.re_ * y.im_ + x.im_ * y.re_);
-	return r;
-}
-
-complejo const
-operator/(complejo const &x, complejo const &y)
-{
-	return x * y.conjugado() / y.modulo2();
-}
-
-complejo const
-operator/(complejo const &c, double f)
-{
-	return complejo(c.re_ / f, c.im_ / f);
-}
 
 bool
 operator==(complejo const &c, double f)
@@ -194,296 +175,55 @@ operator==(complejo const &x, complejo const &y)
 ostream &
 operator<<(ostream &os, const complejo &c)
 {
-	return os << "("
+	return os << "(" 
 	          << c.re_
-	          << ", "
+	          << ", " 
 	          << c.im_
 	          << ")";
 }
 
-
-/*Solo lee con formato (re,im) y lo guarda en c
-istream &
-operator>>(istream &is, complejo &c)
-{
-	int good = false;
-	int bad  = false;
-	double re = 0;
-	double im = 0;
-	char ch = 0;
-
-	if (is >> ch
-	    && ch == '(') {
-		if (is >> re
-		    && is >> ch
-		    && ch == ','
-		    && is >> im
-		    && is >> ch
-		    && ch == ')')
-			good = true;
-		else
-			bad = true;
-	} else if (is.good()) {
-		is.putback(ch);
-		if (is >> re)
-			good = true;
-		else
-			bad = true;
-	}
-
-	if (good)
-		c.re_ = re, c.im_ = im;
-	if (bad)
-		is.clear(ios::badbit);
-
-	return is;
-}
-*/
-/*Version para complejo de formato re + im 'j'*/
-istream &
-operator>>(istream &is, complejo &c)
-{
-	int good = false;
-	int bad  = false;
-	double re = 0,im = 0,num=0;
-	char* ch = 0;
-	string input, str;
-
-   if(!getline(is, input) )
-		bad = true;
-
-   for(int i = 0; i < int(input.length()); i++)
-	{
-   	if(!isspace(input[i]))
-	      str += input[i];
-   }
-	if (( num =strtod(&str[0],&ch) ))
-	{
-		if(*ch=='j')
-		{
-			im = num;
-			if( (num = strtod(ch,&ch) ) )
-				re = num;
-		}
-	re = num;
-
-	if (( num =strtod(ch,&ch)) )
-	{
-		if( *ch != 'j' )
-			bad = true;
-		im = num;
-	}
-
-	good = true;
-	}
-
-	if (good)
-		c.re_ = re, c.im_ = im;
-	if (bad)
-		is.clear(ios::badbit);
-	return is;
-
-}
-
-/* version para mas de 2 terminos
-complejo & strtoc(istream &is, complejo & c)
-{
-double numero,real =0,imag=0;
-char * ptr;
-string str;
-is>>str;
-//if (null)
-//eroor
-int i = 0;
-
-
-	while(str[i] != '\0')
-	{	//la j se encuentra adelante del numero
-		if (str[i]=='j')
-			{
-				i++;
-				imag =strtod(&str[i],&ptr);
-				for(;isdigit(str[i]);i++);
-				if(!imag)
-				imag = 1 ;
-			}
-		if (isdigit(str[i])|| '+'|| '-')
-		{
-			numero =	strtod(&str[i],&ptr);
-		if(str[i]== '-')
-		{
-			i++;
-		}
-		if(str[i]== '+')
-			i++;
-	//	cout << str[i]<< endl;
-		for(;isdigit(str[i]);i++);
-		if(*ptr == 'j')
-			imag = imag + numero;
-		else real = real + numero;
-		}
-	if(str[i]!='-')
-		i++;
-	}
-	c= complejo(real,imag);
-
-	return c;
-}
-*/
-
-
-/*No se si esta bien devovler un compljeo de la misma forma pero con modulo en re_ y fase en im_
 complejo const
-
 complejo::expc() const
-
 {
 	double mod,fase;
 	mod = exp(re_)*cos(im_);
 	fase = exp(re_)*sin(im_);
 
-	return complejo(mod,fase);
-
+	return complejo(mod,fase);	
 }
 
 complejo const
-
 complejo::logc() const
-
 {
+//	if(*this.zero())
+//		return 0;
 	double mod, ang;
 	mod= (*this).modulo();
 	ang= (*this).fase();
 
-
 	return complejo(mod, ang);
-
 }
-
-*/
-
-
-/*
-
-
-
-complejo complejo::sumar(const complejo & r)
-
-{
-
-return complejo(re_+r.re_, im_+r.im_);
-
-}
-
-
-
-complejo complejo::sumar (double f) {
-
-return complejo (re_+f,im_);
-
-}
-
-
-
-void SetReal(double xx)
-
-{
-
-re_=xx;
-
-}
-
-void SetImag(double yy){
-
-im_=yy;
-
-}
-
-
-
-complejo
-
-complejo::operator+ (const complejo & r)
-
-{
-
-return complejo(re_ + r.re_ , im_ + r.im_);
-
-}
-
-complejo complejo:: operator+ (double f)
-
-{
-
- return complejo (re_+f,im_);
-
-}
-
-
-
-complejo complejo::restar(const complejo & r)
-
-{
-
-return complejo(re_-r.re_, im_-r.im_);
-
-}
-
-
-
-complejo complejo::restar(double f) {
-
-return complejo (re_-f,im_);
-
-}
-
-
-
-
-
-complejo
-
-complejo::operator- (const complejo & r)
-
-{
-
-return complejo(re_ - r.re_ , im_ - r.im_);
-
-}
-
-complejo complejo:: operator- (double f)
-
-{
-
- return complejo (re_-f,im_);
-
-}
-
 
 
 complejo const
-
-complejo::operator*(complejo const &x)
-
+complejo::operator^(complejo const & pot)
 {
+//	if (pot.im_ == 0) 
+//		{
+		//	if (pot.re_ == 1)
+	//			return *this;
+//			return *this^(pot-1); //porque -1?
+//	}
+complejo z;
+	z = this->logc();
 
-	complejo r(x.re_ * re_ - x.im_ * im_,
+	z*= pot; 
+	
+	return z.expc();
 
-	          x.re_ * im_ + x.im_ * re_);
 
-	return r;
-
+	//return *this;
 }
 
 
 
-complejo const
-
-complejo::operator/(complejo const &y)
-
-{
-
-	return *this * y.conjugado() / y.modulo2();
-
-}
-*/
