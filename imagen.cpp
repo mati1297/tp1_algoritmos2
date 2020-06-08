@@ -125,6 +125,8 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
             l_aux.push(c_aux*l_aux.pop());
           } else if (s_aux == "/") {
             l_aux.push(c_aux/l_aux.pop());
+          } else if (s_aux == "^") {
+            l_aux.push(c_aux^l_aux.pop());
           }
         } // Realizo las funciones
         else {
@@ -147,13 +149,12 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
             //l_aux.push(l_aux.pop().ln());
           }
           else if (s_aux == "sin"){
-            //l_aux.push(l_aux.pop().sin());
+            l_aux.push(l_aux.pop().seno());
           }
           else if (s_aux == "cos"){
-            //l_aux.push(l_aux.pop().cos());
+            l_aux.push(l_aux.pop().coseno());
           }
         }
-        std::cout<<it.dato()<<endl;
         // Avanzo al iterador
         it = it.avanzar();
       } // fin del while
@@ -174,7 +175,6 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
 				im_aux.matriz[i][j] = this->matriz[y][x];
       }
     }
-    std::cout<<"(Al parecer funciona)> ◕‿↼"<<endl;
   }
   return im_aux;
 }

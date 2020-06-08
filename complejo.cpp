@@ -95,6 +95,20 @@ complejo::fase() const
     return atan2(re_,im_);
 }
 
+complejo const & complejo::seno() {
+	double aux = re_;
+	re_ = sin(re_) * cosh(im_);
+	im_ = cos(aux) * sinh(im_);
+	return *this;
+}
+
+complejo const & complejo::coseno() {
+	double aux = re_;
+	re_ = cos(re_) * cosh(im_);
+	im_ = -sin(aux) * sinh(im_);
+	return *this;
+}
+
 
 complejo const &
 complejo::conjugar()
@@ -114,6 +128,19 @@ complejo::zero() const
 {
 	return ( (re_ ==0) && (im_==0) ) ? true : false;
 }
+
+complejo const complejo::operator^(complejo const & pot) {
+	if (pot.im_ == 0) {
+		if (pot.re_ == 1)
+			return *this;
+		return *this^(pot-1); 
+	}
+	return *this;
+}
+
+
+
+
 
 /*sobrecarga de operadores para suma, resta multiplicacion*/
 complejo const

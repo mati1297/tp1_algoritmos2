@@ -1,6 +1,11 @@
 #ifndef SHUNTING_YARD__H
 #define SHUNTING_YARD__H
 
+#include "lista.h"
+#include <iostream>
+#include <string>
+#include <cstring>
+
 #define EMPTY_STRING ""
 #define DECIMAL_CHAR '.'
 #define MSJ_ERROR_PARENTESIS "Error: parentesis no balanceados"

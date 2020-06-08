@@ -20,10 +20,14 @@ public:
 	double im() const;
 	double modulo() const;
 	double modulo2() const;
-   	double fase() const;
-	complejo const &conjugar();
+  double fase() const;
+	complejo const & seno();
+	complejo const & coseno();
+	complejo const & conjugar();
 	complejo const conjugado() const;
 	bool zero() const;
+	// no anda por ahora
+	complejo const operator^(complejo const &);
 
 	friend complejo const operator+(complejo const &, complejo const &);
 	friend complejo const operator-(complejo const &, complejo const &);

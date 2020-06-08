@@ -1,29 +1,15 @@
+#include "shunting_yard.h"
+#include "lista.h"
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "lista.h"
-#include "shunting_yard.h"
-#include "imagen.h" // esto hay que sacarlo, solo esa de las pruebas cuando esto era un main
+
 
 //ATENCION, ESTE CODIGO DEBE PERFECCIONARSE INTERNAMENTE (MATI NO CUELGUES, FIRMA MATI)
 //FALTA RETOCAR PRECEDENCIA
 //RETOCAR LO DE LOS PARENTESIS Y LAS STRING
 //VER SI HAY MEJOR MANERA DE CHEQUEAR QUE NO ()
 using namespace std;
-
-int main(int argc, char ** argv){
-	if(argc < 2)
-		return 0;
-
-	lista<string> argumentos = shuntingYard(argv[1]);
-
-	cout << argumentos << endl;
-	Imagen prueba = Imagen(10,10,5,1),prueba_transf;
-	prueba_transf = prueba.transformar(argumentos);
-
-	return 0;
-}
-
 
 lista<string> shuntingYard(string input){
 	lista<string> cola_salida;

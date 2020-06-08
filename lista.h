@@ -64,6 +64,7 @@ public:
 
 	~lista();
 
+	lista<T> & operator=(const lista<T> &);
 	bool vacia() const; //Chequea si esta vacia
 	bool llena() const; //Chequea si esta llena
 	size_t getTamano() const; //Devuelve el tamano
@@ -208,6 +209,42 @@ lista<T>::~lista(){
 		delete p;
 		p = q;
 	}
+}
+
+
+template <typename T>
+lista<T> & lista<T>::operator=(const lista<T> & orig) {
+	if (&orig != this) {
+		// libero memoria del this
+		for(nodo* p = pri; p; ){
+			nodo * q = p->sig;
+			delete p;
+			p = q;
+		}
+		// copio uno los nodos de orig this
+
+		nodo* ptr;
+		nodo* ant;
+		pri = 0;
+		ult = 0;
+		tam = orig.tam;
+
+		for(ptr = orig.pri, ant = 0; ptr; ptr = ptr->sig){
+			nodo* nuevo = new nodo(ptr->dato);
+			nuevo->ant = ant;
+			nuevo->sig = 0;
+
+			if(ant)
+				ant->sig = nuevo;
+
+			if(!pri)
+				pri = nuevo;
+
+			ant = nuevo;
+		}
+		ult = ant;
+	}
+	return *this;
 }
 
 template <typename T>

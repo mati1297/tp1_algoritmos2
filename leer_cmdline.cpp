@@ -2,7 +2,8 @@
 #include "cmdline.h"
 #include "leer_cmdline.h"
 #include "imagen.h"
-
+#include "lista.h"
+#include "shunting_yard.h"
 using namespace std;
 
 
@@ -34,24 +35,26 @@ static istream *input = 0;
 static ostream *output = 0;
 static ifstream input_file;
 static ofstream output_file;
-static funcion_t funcion;
+static lista<string> funcion;
 
 
-funcion_t leer_cmdline(int argc, char * const argv[], istream*& input_, ostream*& output_, ifstream*& input_file_, ofstream*& output_file_){
+lista<string> leer_cmdline(int argc, char * const argv[], istream*& input_, ostream*& output_, ifstream*& input_file_, ofstream*& output_file_){
   static option_t options[OPTIONS_CANT]; //Se crea el vector static de opciones
   cargar_vector_argumentos(options); //Se carga el vector
   cmdline cmdl(options); //Se crea el objeto cmdline
   cmdl.parse(argc, argv); //Se llama al metodo de la clase cmdline
-  
+
   //Se cargan las variables pasadas.
   input_ = input;
   output_ = output;
   input_file_ = &input_file;
   output_file_ = &output_file;
-  
-  //Se devuelve la funcion elegida.
+
+  //Se devuelve la lista ordenada por shunting yard.
+  std::cout<<"Esto le devuelvo al main:"<<funcion<<std::endl;
+  std::cout<<"Largo de funcion:"<<funcion.getTamano()<<std::endl;
   return funcion;
-} 
+}
 
 void cargar_vector_argumentos(option_t* options){
   options[0] = {1, "i", "input", "-", opt_input, OPT_DEFAULT};
@@ -87,16 +90,21 @@ static void opt_output(string const & arg) {
 }
 
 static void opt_funcion(string const & arg) {
-  if(arg == "-" || arg == CMD_Z)
-    funcion = Z;
-  else if(arg == CMD_EXPONENCIAL)
-    funcion = EXPONENCIAL;
-  else if(arg == CMD_CUADRADO)
-    funcion = CUADRADO;
+  std::cout<<funcion<<std::endl;
+  std::cout<<arg<<std::endl;
+
+  if(arg == "-") {
+    funcion.push("z");
+  } else {
+    funcion = lista<string>(shuntingYard(arg));
+  }
+
+  std::cout<<funcion<<std::endl;
+  /* EN MI OPINION ESTO YA NO VALE PORQUE SE VALIDA EN SY -MANUEL
   else{
     cerr << MSJ_ERROR_FUNCION << endl;
     exit(EXIT_FAILURE);
-  }
+  }*/
 }
 
 static void opt_help(string const & arg) {
