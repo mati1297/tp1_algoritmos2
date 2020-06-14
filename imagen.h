@@ -3,9 +3,9 @@
 
 #include "lista.h"
 #include "complejo.h"
+#include "vector.h"
 
 #include <cmath>
-#include <vector>
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -47,7 +47,7 @@ private:
   int filas;
   int columnas;
   int intensidad;
-  std::vector<std::vector<int> > matriz = std::vector<std::vector<int> >(FILAS_DEF);
+  Vector<Vector<int>> matriz;
   
   /*Recibe una cadena, la valida, guarda el valor como intensidad y devuelve la cadena cortada*/
   int setIntensidad(string&);
