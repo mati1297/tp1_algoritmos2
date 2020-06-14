@@ -20,7 +20,7 @@
 #define PGM_INDICADOR "P2"
 #define PGM_INDICADOR_WIN "P2\r"
 #define COMENTARIO "TP0 Algoritmos y Programacion 2. Fiuba. 2020"
-#define SPACE ' '
+#define SPACE " \t\v\f\r"
 
 #define MSJ_ERROR_PGM_INDICADOR "Error al leer (indicador distinto de P2)"
 #define MSJ_ERROR_FILAS "Error al leer (filas)"
@@ -33,6 +33,8 @@
 #define MSJ_ERROR_INTENSIDAD_MIN "Error al leer los pixeles, la intensidad es menor que 0"
 #define MSJ_ERROR_INTENSIDAD_INVALIDA "Error en intensidad máxima, debe ser mayor que 0"
 #define MSJ_ERROR_TAMANO_INVALIDO "Error en el tamaño, uno de los ejes es 0 o menor"
+#define MSJ_ERROR_LINEA_VACIA "Error, hay una linea vacia"
+
 
 /* Clase Imagen
  * Clase que reprensenta a una imagen PGM. Con sus atributos:
@@ -46,6 +48,21 @@ private:
   int columnas;
   int intensidad;
   std::vector<std::vector<int> > matriz = std::vector<std::vector<int> >(FILAS_DEF);
+  
+  /*Recibe una cadena, la valida, guarda el valor como intensidad y devuelve la cadena cortada*/
+  int setIntensidad(string&);
+  
+  /*Recibe una cadena, la valida, guarda el valor como cantidad de columnas y devuelve la cadena cortada*/
+  int setColumnas(string&);
+  
+  /*Recibe una cadena, la valida, guarda el valor como cantidad de filas y devuelve la cadena cortada*/
+  int setFilas(string&);
+  
+  /*Recibe una input stream, lo lee, lo valida y carga la matriz*/
+  int setMatriz(std::istream&);
+  
+  /*Actualiza el tamaño de la matriz al tamaño actual que indica los atributos columnas y filas*/
+  int resizeMatriz();
 
 public:
   /*Constructor por defecto del objeto Imagen.

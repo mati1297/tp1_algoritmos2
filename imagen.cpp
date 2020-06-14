@@ -149,10 +149,10 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
             //l_aux.push(l_aux.pop().ln());
           }
           else if (s_aux == "sin"){
-            l_aux.push(l_aux.pop().seno());
+            //l_aux.push(l_aux.pop().seno());
           }
           else if (s_aux == "cos"){
-            l_aux.push(l_aux.pop().coseno());
+            //l_aux.push(l_aux.pop().coseno());
           }
         }
         // Avanzo al iterador
@@ -180,69 +180,119 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
 }
 
 
-int Imagen::readPGM(std::istream& input){
-  std::string line;
-  int pos_space;
-
-  /*Variable que verifica no entrar en un bucle infinito (ver parte
-   * de lectura de pixeles de la imagen)*/
-  int j_inf = -1;
-
-  /*Verificación de que el archivo tiene el header
-   * "P2", que es el formato que se desea leer.
-   * Antes de cada lectura, se quitan todos los espacios del inicio
-   * de la linea y se verifican que la linea sea un comentario.
-   * Todas las lineas que se detectan comentarios son descartadas.*/
-  while(getline(input, line))
-    if((line = quitarEspaciosInicio(line))[0] != PGM_COMENTARIO)
-      break;
-
-  if((line != PGM_INDICADOR) && (line != PGM_INDICADOR_WIN)){
-    std::cerr<<MSJ_ERROR_PGM_INDICADOR<<std::endl;
-    return(EXIT_FAILURE);
-  }
-
-
-
-
-  /* Se leen datos de cantidad de filas y columnas (ambos en
-   * una misma linea en el archivo .pgm), luego se cambia el
-   * tamaño de la matriz del objeto Imagen para poder alojar
-   * la imagen correctamente.*/
-  while(getline(input, line))
-    if((line = quitarEspaciosInicio(line))[0] != PGM_COMENTARIO)
-      break;
-
-
-  pos_space = encontrarEspacio(line);
+int Imagen::setIntensidad(std::string& input){
+  size_t lectura;
   try{
-    columnas = std::stoi(line.substr(0, pos_space));
+    intensidad = stoi(input, &lectura);
   }
-  catch(std::invalid_argument &err){
-    std::cerr << MSJ_ERROR_COLUMNAS << std::endl;
-    return(EXIT_FAILURE);
+  catch(std::invalid_argument& err){
+	std::cerr << MSJ_ERROR_INTENSIDAD<< std::endl;
+	return 1;
   }
+  if(intensidad <= 0){
+	std::cerr << MSJ_ERROR_INTENSIDAD_INVALIDA << std::endl;
+	return 1;
+  }
+  input = input.substr(lectura);
+  return 0;
+}
+
+int Imagen::setColumnas(std::string& input){
+  size_t lectura;
   try{
-    filas = std::stoi(line.substr(pos_space + 1));
+    columnas = stoi(input, &lectura);
   }
-  catch(std::invalid_argument &err){
-    std::cerr << MSJ_ERROR_FILAS << std::endl;
-    return(EXIT_FAILURE);
+  catch(std::invalid_argument& err){
+	std::cerr << MSJ_ERROR_COLUMNAS << std::endl;
+	return 1;
   }
-
-  if(filas <= 0 || columnas <= 0){
-    std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
-    return(EXIT_FAILURE);
+  if(columnas <= 0){
+	std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
+	return 1;
   }
+  input = input.substr(lectura);
+  return 0;
+}
 
-  //Se hace el resize de las filas y columnas.
+int Imagen::setFilas(std::string& input){
+  size_t lectura;
+  try{
+    filas = stoi(input, &lectura);
+  }
+  catch(std::invalid_argument& err){
+	std::cerr << MSJ_ERROR_FILAS << std::endl;
+	return 1;
+  }
+  if(filas<=0){
+	std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
+	return 1;
+  }
+  input = input.substr(lectura);
+  return 0;
+}
 
+int Imagen::setMatriz(std::istream& input){
+	/*Se leen los datos de cada pixel de la imagen del archivo .pgm. No permite
+   * comentarios entre lineas. No importa la cantidad de pixeles que
+   * haya por linea, se leen de corrido hasta que se complete la fila.
+   * Si hay menos pixeles de los indicados, el programa termina con
+   * un error, si hay mas, los ignora. */
+   
+   size_t lectura;
+   std::string line;
+   
+  while(getline(input, line)){
+    if(line.find_first_not_of(SPACE) == std::string::npos){
+      std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+	  return 1;
+	}
+    line = line.substr(line.find_first_not_of(SPACE));
+    if(line[0] != PGM_COMENTARIO)
+      break;
+  }
+  
+  for(int i = 0; i < filas; i++){
+	for(int j = 0; j < columnas; j++){
+	  if(line.find_first_not_of(SPACE) == std::string::npos){
+	    if(!getline(input, line)){
+		  std::cerr << MSJ_ERROR_TAMANO << std::endl;
+          return 1;
+	    }
+        if(line.find_first_not_of(SPACE) == std::string::npos){ //Hay una linea vacia
+		  std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+		  return 1;
+		}
+	  }
+	  try{
+        matriz[i][j] = std::stoi(line, &lectura);
+      }
+      catch(std::invalid_argument &err){
+        std::cerr << MSJ_ERROR_PIXELES << std::endl;
+        return 1;
+      }
+      if(matriz[i][j] > intensidad){
+        std::cerr << MSJ_ERROR_INTENSIDAD_MAX << std::endl;
+        return 1;
+      }
+      if(matriz[i][j] < 0){
+        std::cerr << MSJ_ERROR_INTENSIDAD_MIN << std::endl;
+        return 1;
+      }
+      line = line.substr(lectura);
+    }
+  }
+  
+  return 0;
+
+}
+
+int Imagen::resizeMatriz(){
   try{
     matriz.resize(filas);
   }
   catch(std::bad_alloc &err){
     std::cerr << MSJ_ERROR_MEMORIA << std::endl;
-    return(EXIT_FAILURE);
+    return 1;
   }
 
   for(int i = 0; i < filas; i++){
@@ -251,112 +301,81 @@ int Imagen::readPGM(std::istream& input){
     }
     catch(std::bad_alloc &err){
       std::cerr << MSJ_ERROR_MEMORIA << std::endl;
-      return(EXIT_FAILURE);
+      return 1;
     }
   }
+  return 0;
+}
 
 
+
+
+
+int Imagen::readPGM(std::istream& input){
+  std::string line;
+
+  /*Verificación de que el archivo tiene el header
+   * "P2", que es el formato que se desea leer.*/
+  while(getline(input, line)){
+    if(line.find_first_not_of(SPACE) == std::string::npos){
+      std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+	  return EXIT_FAILURE;
+	}
+    line = line.substr(line.find_first_not_of(SPACE));
+    if(line[0] != PGM_COMENTARIO)
+      break;
+  }
+
+  if((line != PGM_INDICADOR) && (line != PGM_INDICADOR_WIN)){
+      std::cerr<<MSJ_ERROR_PGM_INDICADOR<<std::endl;
+      return(EXIT_FAILURE);
+  }
+
+  /* Se leen datos de cantidad de filas y columnas (ambos en
+   * una misma linea en el archivo .pgm), luego se cambia el
+   * tamaño de la matriz del objeto Imagen para poder alojar
+   * la imagen correctamente.*/
+  while(getline(input, line)){
+    if(line.find_first_not_of(SPACE) == std::string::npos){
+      std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+	  return EXIT_FAILURE;
+	}
+    line = line.substr(line.find_first_not_of(SPACE));
+    if(line[0] != PGM_COMENTARIO)
+      break;
+  }
+
+  if(setColumnas(line))
+	return EXIT_FAILURE;
+  
+  if(setFilas(line))
+	return EXIT_FAILURE;
+ 
+  if(resizeMatriz())
+	return EXIT_FAILURE;
 
 
   /*Lee el valor de intensidad dado en el archivo .pgm*/
-  while(getline(input, line))
-    if((line = quitarEspaciosInicio(line))[0] != PGM_COMENTARIO)
+  while(getline(input, line)){
+    if(line.find_first_not_of(SPACE) == std::string::npos){
+      std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+	  return EXIT_FAILURE;
+	}
+    line = line.substr(line.find_first_not_of(SPACE));
+    if(line[0] != PGM_COMENTARIO)
       break;
-
-  try{
-    intensidad = stoi(line);
-  }
-  catch(std::invalid_argument &err){
-    std::cerr << MSJ_ERROR_INTENSIDAD << std::endl;
-    return(EXIT_FAILURE);
   }
 
-  if(intensidad <= 0){
-    std::cerr << MSJ_ERROR_INTENSIDAD_INVALIDA << std::endl;
-    return(EXIT_FAILURE);
+  if(setIntensidad(line))
+    return EXIT_FAILURE;
+
+
+  /* Se lee la matriz, se le pasa directamente el puntero istream ya que debe leer
+   * varias lineas */
+  if(setMatriz(input)){
+	  return EXIT_FAILURE;
   }
-
-
-  while(getline(input, line))
-    if((line = quitarEspaciosInicio(line))[0] != PGM_COMENTARIO)
-      break;
-
-  /*Se leen los datos de cada pixel de la imagen del archivo .pgm. No permite
-   * comentarios entre lineas. No importa la cantidad de pixeles que
-   * haya por linea, se leen de corrido hasta que se complete la fila.
-   * Si hay menos pixeles de los indicados, el programa termina con
-   * un error, si hay mas, los ignora. */
-  for(int i = 0; i < filas; i++){
-    /*Se setea j_inf = -1 al principio de cada fila*/
-    j_inf = -1;
-    for(int j = 0; j < columnas; j++){
-      line = quitarEspaciosInicio(line); //Se quitan los espacios del principio de la linea.
-      pos_space = encontrarEspacio(line); //Se busca el primer espacio, esto indica el fin del numero que se quiera leer.
-
-      /*Si existe un espacio mas adelante del numero se lee y luego se quita el numero leido*/
-      if(pos_space!=-1){
-        try{
-          matriz[i][j] = std::stoi(line.substr(0, pos_space));
-        }
-        catch(std::invalid_argument &err)
-        {
-          std::cerr << MSJ_ERROR_PIXELES << std::endl;
-          return(EXIT_FAILURE);
-        }
-        if(matriz[i][j] > intensidad){
-          std::cerr << MSJ_ERROR_INTENSIDAD_MAX << std::endl;
-          return(EXIT_FAILURE);
-        }
-        if(matriz[i][j] < 0){
-            std::cerr << MSJ_ERROR_INTENSIDAD_MIN << std::endl;
-            return(EXIT_FAILURE);
-        }
-        line = line.substr(pos_space);
-
-      }
-      /*Si no hay un espacio mas adelante quiere decir que la linea termina inmediatamente
-       * o queda solo un numero por leer. Si es lo primero se retrocede j, ya que esta
-       * iteracion del ciclo no pudo guardar nada. La variable j_inf se utiliza para chequear
-       * que no falten datos en el archivo, ya que en ese caso se entraria en un bucle infinito
-       * al disminuir j. Si es lo segundo se guarda el numero que queda. Luego se lee la siguiente
-       *  linea en ambos casos.*/
-      else{
-        if(line.size()){
-          try{
-            matriz[i][j] = std::stoi(line);
-          }
-          catch(std::invalid_argument &err)
-          {
-            std::cerr << MSJ_ERROR_PIXELES << std::endl;
-            return(EXIT_FAILURE);
-          }
-          if(matriz[i][j] > intensidad){
-            std::cerr << MSJ_ERROR_INTENSIDAD_MAX << std::endl;
-            return(EXIT_FAILURE);
-          }
-          if(matriz[i][j] < 0){
-            std::cerr << MSJ_ERROR_INTENSIDAD_MIN << std::endl;
-            return(EXIT_FAILURE);
-          }
-        }
-        else{
-
-          if(j_inf == j){
-            std::cerr << MSJ_ERROR_TAMANO << std::endl;
-            return(EXIT_FAILURE);
-          }
-
-          j_inf = j;
-          j--;
-
-
-        }
-        getline(input, line);
-
-      }
-    }
-  }
-  return(EXIT_SUCCESS);
+  return EXIT_SUCCESS;
 }
 
 void Imagen::savePGM(std::ostream& output){
