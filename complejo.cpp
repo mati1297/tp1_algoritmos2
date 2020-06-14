@@ -92,8 +92,8 @@ complejo::fase() const
 	if(this->zero())
 		return 0;
 
-    return atan2(re_,im_);//devuelve en grados
-//atan2 (y,x) * 180 / PI --> definir pi o usar el de la biblioteca
+    return atan2(im_,re_);//devuelve en grados
+//  return atan2(im_,re_)*180/3.14159265359 --> definir pi o usar el de la biblioteca
 }
 
 
@@ -189,6 +189,7 @@ complejo::logc() const
 //		return 0;
 	double mod, ang;
 	mod= (*this).modulo();
+	mod = log(mod);
 	ang= (*this).fase();
 
 	return complejo(mod, ang);
