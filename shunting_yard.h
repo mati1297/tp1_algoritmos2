@@ -6,12 +6,12 @@
 #include <string>
 #include <cstring>
 
-#define EMPTY_STRING ""
-#define DECIMAL_CHAR '.'
+#define SPACE " \t\v\f\r"
+#define CHARS_NUMBERS "0123456789."
 #define MSJ_ERROR_PARENTESIS "Error: parentesis no balanceados"
 #define MSJ_ERROR_OPERADOR_DESC "Error: funcion o operador desconocido"
-#define LEFT_PARENTESIS_OP "("
-#define RIGHT_PARENTESIS_OP ")"
+#define LEFT_SEPARATOR_OP "("
+#define RIGHT_SEPARATOR_OP ")"
 #define MSJ_ERROR_NUMEROS_SEG "Error: dos numeros seguidos"
 #define MSJ_ERROR_OPERADORES_SEG "Error: dos operadores/funciones seguidos"
 #define MSJ_ERROR_OPERADOR_FINAL "Error: la entrada termina con un operador"
@@ -21,12 +21,19 @@
 #define MSJ_ERROR_PARENTESIS_VACIOS "Error: parentesis vacios"
 
 
-lista<string> shuntingYard(string input);
-bool izqAsoc(string);
-string leerToken(string, string*, size_t);
-int precedencia(string);
-string leerNumero(string);
-string quitarEspaciosInicio_matichotoaprendeaprogramar(string); //ver que hacer con esta
+
+#define OPERADORES_CANT 5
+#define FUNCIONES_CANT 8
+#define CARACTERES_ESPECIAL_CANT 2
+
+lista<string> shuntingYard(string);
+bool izqAsoc(const string&);
+int precedencia(const string&, const string*);
+string leerToken(const string&, const string*, const size_t);
+string leerNumero(const string&);
+void cargarVectorOperadores(string *operadores);
+void cargarVectorFunciones(string *funciones);
+void cargarVectorCaracteresEspecial(string *caracteresEspecial);
 
 
 #endif

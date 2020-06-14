@@ -395,21 +395,3 @@ void Imagen::savePGM(std::ostream& output){
     }
   }
 }
-
-std::string quitarEspaciosInicio(std::string input){
-  int i;
-  for(i = 0; i < int(input.length()); i++){
-    if(!isspace(input[i]))
-      break;
-  }
-  return input.substr(i);
-}
-
-int encontrarEspacio(std::string input){
-  int i;
-  for(i = 0; i < int(input.length()); i++){
-    if(isspace(input[i]))
-      return i;
-  }
-  return -1;
-}

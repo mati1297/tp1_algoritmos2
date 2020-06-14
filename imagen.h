@@ -121,16 +121,5 @@ public:
 };
 
 
-/* Funciones auxiliares de la clase. No son metodos. */
-
-/* Se lee una cadena y se remueven todos los espacios del principio,
- * se devuelve la nueva cadena. */
-std::string quitarEspaciosInicio(std::string);
-
-/* Se lee una cadena y se devuelve la posicion del primer espacio de
- * la cadena. Si no se encuentra, se devuelve -1.*/
-int encontrarEspacio(std::string);
-
-
 
 #endif // IMAGEN_H

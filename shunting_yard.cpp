@@ -6,9 +6,7 @@
 
 
 //ATENCION, ESTE CODIGO DEBE PERFECCIONARSE INTERNAMENTE (MATI NO CUELGUES, FIRMA MATI)
-//FALTA RETOCAR PRECEDENCIA
 //RETOCAR LO DE LOS PARENTESIS Y LAS STRING
-//VER SI HAY MEJOR MANERA DE CHEQUEAR QUE NO ()
 using namespace std;
 
 lista<string> shuntingYard(string input){
@@ -17,12 +15,12 @@ lista<string> shuntingYard(string input){
 	string extraido;
 
 	//Por ahora defino los vectores aca hasta que nos entreguen el tp0 para ver si hay que cambiar algo.
-	static string operadores[] = {"+", "-","*", "/", "^"};
-	static size_t operadores_size = 5;
-	static string funciones[] = {"re", "im", "abs", "phase", "exp", "ln", "sin", "cos"};
-	static size_t funciones_size = 8;
-	static string caracteresEspecial[] = {"z", "j"};
-	static size_t caracteresEspecial_size = 2;
+	static string operadores[OPERADORES_CANT];
+	cargarVectorOperadores(operadores);
+	static string funciones[FUNCIONES_CANT];
+	cargarVectorFunciones(funciones);
+	static string caracteresEspecial[CARACTERES_ESPECIAL_CANT];
+	cargarVectorCaracteresEspecial(caracteresEspecial);
 
 	bool flagNumero = false;
 	bool flagOperador = false;
@@ -30,7 +28,8 @@ lista<string> shuntingYard(string input){
 	bool flagParentesis = false;
 
 
-	while(!(input = quitarEspaciosInicio_matichotoaprendeaprogramar(input)).empty()){
+	while(input.find_first_not_of(SPACE) != std::string::npos){
+		input = input.substr(input.find_first_not_of(SPACE));
 		if(isdigit(input[0])){
 			if(flagNumero){
 				cout << MSJ_ERROR_NUMEROS_SEG << endl;
@@ -43,10 +42,9 @@ lista<string> shuntingYard(string input){
 			extraido = leerNumero(input);
 			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
-
 		}
 
-		else if(!(extraido = leerToken(input, caracteresEspecial, caracteresEspecial_size)).empty()){
+		else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
 			if(flagNumero){
 				cout << MSJ_ERROR_NUMEROS_SEG << endl;
 				exit(1);
@@ -58,7 +56,9 @@ lista<string> shuntingYard(string input){
 			pila_operadores.push(extraido);
 			input = input.substr(extraido.length());
 		}
-		else if(!(extraido = leerToken(input, funciones, funciones_size)).empty()){
+		
+		
+		else if(!(extraido = leerToken(input, funciones, FUNCIONES_CANT)).empty()){
 			if(flagNumero){
 				cout << MSJ_ERROR_NUMERO_FUNC_SEG << endl;
 				exit(1);
@@ -71,7 +71,8 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 
-		else if(!(extraido = leerToken(input, operadores, operadores_size)).empty()){
+
+		else if(!(extraido = leerToken(input, operadores, OPERADORES_CANT)).empty()){
 			if(flagOperador){
 				cout << MSJ_ERROR_OPERADORES_SEG << endl;
 				exit(1);
@@ -83,12 +84,11 @@ lista<string> shuntingYard(string input){
 			flagOperador = true;
 			flagNumero = false;
 			flagParentesis = false;
+			
 			while(pila_operadores.llena()){
 				const string operador_top = pila_operadores.mirarTop();
-				//if(!esOperador(operador_top)) //LO BORRO CREO QUE NO HACE FALTA QUE SEA OPERADOR
-				//	break;
-				if(precedencia(operador_top) <= precedencia(extraido)){
-					if((precedencia(operador_top) < precedencia(extraido)) || !izqAsoc(extraido)) //aclara que aca aunque izqAsoc no anda bien igual funciona
+				if(precedencia(operador_top, operadores) <= precedencia(extraido, operadores)){
+					if((precedencia(operador_top, operadores) < precedencia(extraido, operadores)) || !izqAsoc(extraido))
 						break;
 				}
 				if(operador_top == "(")
@@ -100,13 +100,13 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 
-		else if(input[0] == '('){
+		else if(!input.compare(0, 1, LEFT_SEPARATOR_OP)){
 			flagParentesis = true;
 			string operador_insertar(1, input[0]);
 			pila_operadores.push(operador_insertar);
 			input = input.substr(1);
 		}
-		else if(input[0] == ')'){
+		else if(!input.compare(0, 1, RIGHT_SEPARATOR_OP)){
 			if(flagParentesis){
 				cout << MSJ_ERROR_PARENTESIS_VACIOS << endl;
 				exit(1);
@@ -118,7 +118,7 @@ lista<string> shuntingYard(string input){
 					exit(1);
 				}
 				const string operador_top = pila_operadores.mirarTop();
-				if(operador_top == "("){
+				if(operador_top == LEFT_SEPARATOR_OP){
 					pila_operadores.pop();
 					break;
 				}
@@ -143,57 +143,68 @@ lista<string> shuntingYard(string input){
 
 	while(pila_operadores.llena()){
 		const string operador_top = pila_operadores.pop();
-		if(operador_top == "("){
+		if(operador_top == LEFT_SEPARATOR_OP){
 			cout << MSJ_ERROR_PARENTESIS << endl;
 			exit(1);
 		}
 		cola_salida.enqueue(operador_top);
 	}
+	
 	return cola_salida;
 }
 
 
-bool izqAsoc(string input){
+bool izqAsoc(const string& input){
 	if(input == "^")
 		return false;
 	return true;
 }
 
-
-string leerToken(string input, string* vector, size_t vector_size){
-	for(size_t i = 0; i < vector_size; i++){
-		if(!input.compare(0, vector[i].length(), vector[i])){
-			return vector[i];
-		}
-	}
-	return EMPTY_STRING;
-}
-
-int precedencia(string operador){
+int precedencia(const string& operador, const string* operadores){
 	int i;
-	string operadores [] = {"+", "-", "*", "/", "^"};
 	for(i = 0; i < 5; i++)
 		if(operadores[i] == operador)
 			break;
 	return i / 2;
 }
 
-
-string leerNumero(string input){
-	string numero = "";
-	int i = 0;
-	while(isdigit(input[i]) || input[i] == DECIMAL_CHAR){
-		numero += input[i];
-		i++;
+string leerToken(const string& input, const string* vector, const size_t vector_size){
+	for(size_t i = 0; i < vector_size; i++){
+		if(!input.compare(0, vector[i].length(), vector[i])){
+			return vector[i];
+		}
 	}
+	return string();
+}
+
+
+string leerNumero(const string& input){
+	string numero = input.substr(0, input.find_first_not_of(CHARS_NUMBERS));
 	return numero;
 }
 
-string quitarEspaciosInicio_matichotoaprendeaprogramar(string input){
-  int i;
-  for(i = 0; i < int(input.length()); i++){
-    if(!isspace(input[i]))
-      break;
-  }
-  return input.substr(i);
+//Aclarar operadores en orden de precedencia creciente
+void cargarVectorOperadores(string *operadores){
+	operadores[0] = "+";
+	operadores[1] = "-";
+	operadores[2] = "*";
+	operadores[3] = "/";
+	operadores[4] = "^";
 }
+
+void cargarVectorFunciones(string *funciones){
+	funciones[0] = "abs";
+	funciones[1] = "phase";
+	funciones[2] = "exp";
+	funciones[3] = "ln";
+	funciones[4] = "re";
+	funciones[5] = "im";
+	funciones[6] = "sin";
+	funciones[7] = "cos";
+}
+
+void cargarVectorCaracteresEspecial(string *caracteresEspecial){
+	caracteresEspecial[0] = "j";
+	caracteresEspecial[1] = "z";
+}
+
