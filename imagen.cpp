@@ -143,16 +143,16 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
             l_aux.push(l_aux.pop().fase());
           }
           else if (s_aux == "exp"){
-            //l_aux.push(l_aux.pop().exp());
+            l_aux.push(l_aux.pop().expc());
           }
           else if (s_aux == "ln"){
-            //l_aux.push(l_aux.pop().ln());
+            l_aux.push(l_aux.pop().logc());
           }
           else if (s_aux == "sin"){
-            //l_aux.push(l_aux.pop().seno());
+            l_aux.push(l_aux.pop().seno());
           }
           else if (s_aux == "cos"){
-            //l_aux.push(l_aux.pop().coseno());
+            l_aux.push(l_aux.pop().coseno());
           }
         }
         // Avanzo al iterador
@@ -237,10 +237,10 @@ int Imagen::setMatriz(std::istream& input){
    * haya por linea, se leen de corrido hasta que se complete la fila.
    * Si hay menos pixeles de los indicados, el programa termina con
    * un error, si hay mas, los ignora. */
-   
+
    size_t lectura;
    std::string line;
-   
+
   while(getline(input, line)){
     if(line.find_first_not_of(SPACE) == std::string::npos){
       std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
@@ -250,7 +250,7 @@ int Imagen::setMatriz(std::istream& input){
     if(line[0] != PGM_COMENTARIO)
       break;
   }
-  
+
   for(int i = 0; i < filas; i++){
 	for(int j = 0; j < columnas; j++){
 	  if(line.find_first_not_of(SPACE) == std::string::npos){
@@ -281,7 +281,7 @@ int Imagen::setMatriz(std::istream& input){
       line = line.substr(lectura);
     }
   }
-  
+
   return 0;
 
 }
@@ -347,10 +347,10 @@ int Imagen::readPGM(std::istream& input){
 
   if(setColumnas(line))
 	return EXIT_FAILURE;
-  
+
   if(setFilas(line))
 	return EXIT_FAILURE;
- 
+
   if(resizeMatriz())
 	return EXIT_FAILURE;
 
