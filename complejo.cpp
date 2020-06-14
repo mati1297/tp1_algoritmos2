@@ -119,14 +119,14 @@ complejo::zero() const
 
 
 complejo const
-complejo::operator+(const complejo & r) 
+complejo::operator+(const complejo & r)
 {
 return complejo(this->re_ + r.re_ , this->im_ + r.im_);
 }
 
 
-complejo const 
-complejo::operator-(const complejo & r) 
+complejo const
+complejo::operator-(const complejo & r)
 
 {
 
@@ -175,21 +175,11 @@ operator==(complejo const &x, complejo const &y)
 ostream &
 operator<<(ostream &os, const complejo &c)
 {
-	return os << "(" 
+	return os << "("
 	          << c.re_
-	          << ", " 
+	          << ", "
 	          << c.im_
 	          << ")";
-}
-
-complejo const
-complejo::expc() const
-{
-	double mod,fase;
-	mod = exp(re_)*cos(im_);
-	fase = exp(re_)*sin(im_);
-
-	return complejo(mod,fase);	
 }
 
 complejo const
@@ -206,9 +196,33 @@ complejo::logc() const
 
 
 complejo const
+complejo::expc() const
+{
+	double mod,fase;
+	mod = exp(re_)*cos(im_);
+	fase = exp(re_)*sin(im_);
+
+	return complejo(mod,fase);
+}
+
+complejo const & complejo::seno() {
+	double aux = re_;
+	re_ = sin(re_) * cosh(im_);
+	im_ = cos(aux) * sinh(im_);
+	return *this;
+}
+
+complejo const & complejo::coseno() {
+	double aux = re_;
+	re_ = cos(re_) * cosh(im_);
+	im_ = -sin(aux) * sinh(im_);
+	return *this;
+}
+
+complejo const
 complejo::operator^(complejo const & pot)
 {
-//	if (pot.im_ == 0) 
+//	if (pot.im_ == 0)
 //		{
 		//	if (pot.re_ == 1)
 	//			return *this;
@@ -217,13 +231,10 @@ complejo::operator^(complejo const & pot)
 complejo z;
 	z = this->logc();
 
-	z*= pot; 
-	
+	z*= pot;
+
 	return z.expc();
 
 
 	//return *this;
 }
-
-
-
