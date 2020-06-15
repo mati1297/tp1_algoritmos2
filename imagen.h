@@ -48,21 +48,25 @@ private:
   int columnas;
   int intensidad;
   Vector<Vector<int>> matriz;
-  
+
   /*Recibe una cadena, la valida, guarda el valor como intensidad y devuelve la cadena cortada*/
   int setIntensidad(string&);
-  
+
   /*Recibe una cadena, la valida, guarda el valor como cantidad de columnas y devuelve la cadena cortada*/
   int setColumnas(string&);
-  
+
   /*Recibe una cadena, la valida, guarda el valor como cantidad de filas y devuelve la cadena cortada*/
   int setFilas(string&);
-  
+
   /*Recibe una input stream, lo lee, lo valida y carga la matriz*/
   int setMatriz(std::istream&);
-  
+
   /*Actualiza el tamaño de la matriz al tamaño actual que indica los atributos columnas y filas*/
   int resizeMatriz();
+
+  void evaluar_operador(const string &, lista<complejo> &) const;
+
+  void evaluar_funcion(const string &, lista<complejo> &) const;
 
 public:
   /*Constructor por defecto del objeto Imagen.

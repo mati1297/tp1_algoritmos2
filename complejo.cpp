@@ -157,18 +157,14 @@ complejo complejo::coseno() const {
 	return complejo(cos(re_) * cosh(im_), -sin(re_) * sinh(im_));
 }
 
-complejo complejo::multiplicar_i() const {
-	return complejo(-im_,re_);
-}
-
 // cosh(z) = cos(iz)
 complejo complejo::senoh() const {
-	return (this->multiplicar_i()).coseno();
+	return (*this * complejo(0,1)).coseno();
 }
 
 // sinh(z) = -i * sin(iz)
 complejo complejo::cosenoh() const {
-	return ((this->multiplicar_i()).seno()) * complejo(0,-1);
+	return ((*this * complejo(0,1)).seno()) * complejo(0,-1);
 }
 
 complejo complejo::operator^(complejo const & pot) const{

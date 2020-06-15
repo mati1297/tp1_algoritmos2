@@ -116,50 +116,10 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
           l_aux.push(complejo(0,1));
         } // Veo si es un operador (largo 1)
         else if (s_aux.length() == 1){
-          c_aux = l_aux.pop();
-          if (s_aux == "+") {
-            l_aux.push(c_aux+l_aux.pop());
-          } else if (s_aux == "-") {
-            l_aux.push(l_aux.pop()-c_aux);
-          } else if (s_aux == "*") {
-            l_aux.push(c_aux*l_aux.pop());
-          } else if (s_aux == "/") {
-            l_aux.push(l_aux.pop()/c_aux);
-          } else if (s_aux == "^") {
-            l_aux.push(l_aux.pop()^c_aux);
-          }
+          evaluar_operador(s_aux, l_aux);
         } // Realizo las funciones
         else {
-          if (s_aux == "abs") {
-            l_aux.push(l_aux.pop().modulo());
-          }
-          else if (s_aux == "re"){
-            l_aux.push(l_aux.pop().re());
-          }
-          else if (s_aux == "im"){
-            l_aux.push(l_aux.pop().im());
-          }
-          else if (s_aux == "phase"){
-            l_aux.push(l_aux.pop().fase());
-          }
-          else if (s_aux == "exp"){
-            l_aux.push(l_aux.pop().expc());
-          }
-          else if (s_aux == "ln"){
-            l_aux.push(l_aux.pop().logc());
-          }
-          else if (s_aux == "sin"){
-            l_aux.push(l_aux.pop().seno());
-          }
-          else if (s_aux == "cos"){
-            l_aux.push(l_aux.pop().coseno());
-          }
-          else if (s_aux == "sinh"){
-            l_aux.push(l_aux.pop().senoh());
-          }
-          else if (s_aux == "cosh"){
-            l_aux.push(l_aux.pop().cosenoh());
-          }
+          evaluar_funcion(s_aux, l_aux);
         }
         // Avanzo al iterador
         it = it.avanzar();
@@ -172,7 +132,7 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
       c_aux = l_aux.pop();
       //std::cout<<c_aux<<std::endl;
 
-      // realizo la transformacion lineal inversa
+      // realizo la transformacion lineal inversa"ln"){
       x = (int) (x_0 * (1 + c_aux.re()));
       y = (int) (y_0 * (1 - c_aux.im()));
 
@@ -186,8 +146,54 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
   return im_aux;
 }
 
+void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_complejos) const {
+  if (string_aux == "+") {
+    pila_complejos.push(pila_complejos.pop()+pila_complejos.pop());
+  } else if (string_aux == "-") {
+    pila_complejos.push(pila_complejos.pop()-pila_complejos.pop());
+  } else if (string_aux == "*") {
+    pila_complejos.push(pila_complejos.pop()*pila_complejos.pop());
+  } else if (string_aux == "/") {
+    pila_complejos.push(pila_complejos.pop()/pila_complejos.pop());
+  } else if (string_aux == "^") {
+    pila_complejos.push(pila_complejos.pop()^pila_complejos.pop());
+  }
+}
 
-int Imagen::setIntensidad(std::string& input){
+void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_complejos) const {
+  if (string_aux == "abs") {
+    pila_complejos.push(pila_complejos.pop().modulo());
+  }
+  else if (string_aux == "re"){
+    pila_complejos.push(pila_complejos.pop().re());
+  }
+  else if (string_aux == "im"){
+    pila_complejos.push(pila_complejos.pop().im());
+  }
+  else if (string_aux == "phase"){
+    pila_complejos.push(pila_complejos.pop().fase());
+  }
+  else if (string_aux == "exp"){
+    pila_complejos.push(pila_complejos.pop().expc());
+  }
+  else if (string_aux == "ln"){
+    pila_complejos.push(pila_complejos.pop().logc());
+  }
+  else if (string_aux == "sin"){
+    pila_complejos.push(pila_complejos.pop().seno());
+  }
+  else if (string_aux == "cos"){
+    pila_complejos.push(pila_complejos.pop().coseno());
+  }
+  else if (string_aux == "sinh"){
+    pila_complejos.push(pila_complejos.pop().senoh());
+  }
+  else if (string_aux == "cosh"){
+    pila_complejos.push(pila_complejos.pop().cosenoh());
+  }
+}
+
+int Imagen::setIntensidad(std::string& input) {
   size_t lectura;
   try{
     intensidad = stoi(input, &lectura);

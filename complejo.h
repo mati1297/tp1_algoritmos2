@@ -5,7 +5,6 @@
 
 class complejo {
 	double re_, im_;
-	complejo multiplicar_i() const;
 public:
 	complejo();
 	complejo(double);
