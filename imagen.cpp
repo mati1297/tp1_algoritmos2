@@ -126,7 +126,7 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
           } else if (s_aux == "/") {
             l_aux.push(l_aux.pop()/c_aux);
           } else if (s_aux == "^") {
-            l_aux.push(c_aux^l_aux.pop());
+            l_aux.push(l_aux.pop()^c_aux);
           }
         } // Realizo las funciones
         else {
@@ -160,10 +160,11 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
       } // fin del while
 
       if (l_aux.getTamano() != 1){
-        std::cout<<"(✿╹◡╹) <(Error la re concha de tu madre)"<<endl;
+        std::cout<<"(✿╹◡╹) <(Error de la re concha de tu madre)"<<endl;
       }
       // El ultimo elemento que quedo en la lista aux. es el complejo resultado
       c_aux = l_aux.pop();
+      //std::cout<<c_aux<<std::endl;
 
       // realizo la transformacion lineal inversa
       x = (int) (x_0 * (1 + c_aux.re()));

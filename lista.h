@@ -177,7 +177,7 @@ lista<T>::lista(){
 	tam = 0;
 }
 
-template <typename T>
+template <typename T> 
 lista<T>::lista(const lista& orig){
 	nodo* p;
 	nodo* ant;

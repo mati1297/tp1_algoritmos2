@@ -221,21 +221,9 @@ complejo const & complejo::coseno() {
 }
 
 complejo const
-complejo::operator^(complejo const & pot)
-{
-//	if (pot.im_ == 0)
-//		{
-		//	if (pot.re_ == 1)
-	//			return *this;
-//			return *this^(pot-1); //porque -1?
-//	}
-complejo z;
-	z = this->logc();
-
-	z*= pot;
-
-	return z.expc();
-
-
-	//return *this;
+complejo::operator^(complejo const & pot) {
+	std::cout<<"Aca1"<<std::endl;
+	this->logc();
+	std::cout<<"Aca2"<<std::endl;
+	return ((*this) * pot).expc();
 }
