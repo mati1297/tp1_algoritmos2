@@ -81,7 +81,6 @@ bool complejo::zero() const{
 	return !re_ && !im_;
 }
 
-
 complejo complejo::operator+(const complejo & r) const{
 	return complejo(re_ + r.re_ , im_ + r.im_);
 }

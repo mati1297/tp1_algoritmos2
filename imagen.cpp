@@ -191,6 +191,12 @@ void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_c
   else if (string_aux == "cosh"){
     pila_complejos.push(pila_complejos.pop().cosenoh());
   }
+  else if (string_aux == "cosh"){
+    pila_complejos.push(pila_complejos.pop().cosenoh());
+  }
+  else if (string_aux == "conj"){
+    pila_complejos.push(pila_complejos.pop().conjugado());
+  }
 }
 
 int Imagen::setIntensidad(std::string& input) {

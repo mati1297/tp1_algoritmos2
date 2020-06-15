@@ -203,6 +203,7 @@ void cargarVectorFunciones(string *funciones){
 	funciones[7] = "cosh";
 	funciones[8] = "sin";
 	funciones[9] = "cos";
+	funciones[10] = "conj";
 }
 
 void cargarVectorCaracteresEspecial(string *caracteresEspecial){
