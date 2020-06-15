@@ -23,7 +23,7 @@
 
 
 #define OPERADORES_CANT 5
-#define FUNCIONES_CANT 10
+#define FUNCIONES_CANT 11
 #define CARACTERES_ESPECIAL_CANT 3
 
 lista<string> shuntingYard(string);
