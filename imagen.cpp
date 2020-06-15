@@ -112,7 +112,7 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
         else if (s_aux == "z") {
           l_aux.push(complejo(x,y));
         }
-        else if (s_aux == "j") {
+        else if ((s_aux == "j")||(s_aux == "i")) {
           l_aux.push(complejo(0,1));
         } // Veo si es un operador (largo 1)
         else if (s_aux.length() == 1){

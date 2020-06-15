@@ -207,5 +207,6 @@ void cargarVectorFunciones(string *funciones){
 
 void cargarVectorCaracteresEspecial(string *caracteresEspecial){
 	caracteresEspecial[0] = "j";
-	caracteresEspecial[1] = "z";
+	caracteresEspecial[1] = "i";
+	caracteresEspecial[2] = "z";
 }

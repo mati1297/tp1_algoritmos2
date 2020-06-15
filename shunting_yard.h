@@ -24,7 +24,7 @@
 
 #define OPERADORES_CANT 5
 #define FUNCIONES_CANT 10
-#define CARACTERES_ESPECIAL_CANT 2
+#define CARACTERES_ESPECIAL_CANT 3
 
 lista<string> shuntingYard(string);
 bool izqAsoc(const string&);
