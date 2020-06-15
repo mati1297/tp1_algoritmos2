@@ -100,11 +100,6 @@ static void opt_funcion(string const & arg) {
   }
 
   std::cout<<funcion<<std::endl;
-  /* EN MI OPINION ESTO YA NO VALE PORQUE SE VALIDA EN SY -MANUEL
-  else{
-    cerr << MSJ_ERROR_FUNCION << endl;
-    exit(EXIT_FAILURE);
-  }*/
 }
 
 static void opt_help(string const & arg) {
