@@ -23,7 +23,6 @@ public:
 	double modulo() const;
 	double modulo2() const;
 	double fase() const;
-	complejo& conjugar();
 	complejo conjugado() const;
 	bool zero() const;
 	complejo logc() const;

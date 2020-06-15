@@ -73,12 +73,6 @@ double complejo::fase() const{
     return atan2(im_,re_);
 }
 
-
-complejo& complejo::conjugar(){
-	im_*= -1;
-	return *this;
-}
-
 complejo complejo::conjugado() const{
 	return complejo(re_, -im_);
 }
