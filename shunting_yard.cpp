@@ -53,11 +53,11 @@ lista<string> shuntingYard(string input){
 			flagFuncion = false;
 			flagNumero = true;
 			flagParentesis = false;
-			pila_operadores.push(extraido);
+			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
 		}
-		
-		
+
+
 		else if(!(extraido = leerToken(input, funciones, FUNCIONES_CANT)).empty()){
 			if(flagNumero){
 				cout << MSJ_ERROR_NUMERO_FUNC_SEG << endl;
@@ -84,7 +84,7 @@ lista<string> shuntingYard(string input){
 			flagOperador = true;
 			flagNumero = false;
 			flagParentesis = false;
-			
+
 			while(pila_operadores.llena()){
 				const string operador_top = pila_operadores.mirarTop();
 				if(precedencia(operador_top, operadores) <= precedencia(extraido, operadores)){
@@ -149,7 +149,7 @@ lista<string> shuntingYard(string input){
 		}
 		cola_salida.enqueue(operador_top);
 	}
-	
+
 	return cola_salida;
 }
 
@@ -207,4 +207,3 @@ void cargarVectorCaracteresEspecial(string *caracteresEspecial){
 	caracteresEspecial[0] = "j";
 	caracteresEspecial[1] = "z";
 }
-
