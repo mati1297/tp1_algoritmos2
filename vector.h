@@ -147,12 +147,14 @@ void Vector<T>::resize(const size_t l){
 	}
 	else{
 		size = l;
+		T* new_ptr = new T[l];
 		try{
-			ptr = new T[l];
+			new_ptr = new T[l];
 		}
 		catch(std::bad_alloc &err){
 			throw err;
 		}
+		ptr = new_ptr;
 		size_t i = 0;
 		for( ; i < l && i < old_size; i++){
 			ptr[i] = old_ptr[i];
@@ -175,7 +177,14 @@ void Vector<T>::resize(const size_t l, const T& def){
 	}
 	else{
 		size = l;
-		ptr = new T[l];
+		T* new_ptr;
+		try{
+			new_ptr = new T[l];
+		}
+		catch(std::bad_alloc &err){
+			throw err;
+		}
+		ptr = new_ptr;
 		size_t i = 0;
 		for( ; i < l && i < old_size; i++){
 			ptr[i] = old_ptr[i];
