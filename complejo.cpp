@@ -1,36 +1,30 @@
 #include "complejo.h"
 #include <iostream>
 #include <cmath>
+#include <limits>
 
 using namespace std;
 
-complejo::complejo() : re_(0), im_(0)
-{
+complejo::complejo() : re_(0), im_(0){
 }
 
-complejo::complejo(double r) : re_(r), im_(0)
-{
+complejo::complejo(double r) : re_(r), im_(0){
 }
 
-complejo::complejo(double r, double i) : re_(r), im_(i)
-{
+complejo::complejo(double r, double i) : re_(r), im_(i){
 }
 
-complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_)
-{
+complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_){
 }
 
-complejo const &
-complejo::operator=(complejo const &c)
-{
+
+complejo& complejo::operator=(complejo const &c){
 	re_ = c.re_;
 	im_ = c.im_;
 	return *this;
 }
 
-complejo const &
-complejo::operator*=(complejo const &c)
-{
+complejo& complejo::operator*=(complejo const &c){
 	double re = re_ * c.re_
 	         - im_ * c.im_;
 	double im = re_ * c.im_
@@ -39,142 +33,107 @@ complejo::operator*=(complejo const &c)
 	return *this;
 }
 
-complejo const &
-complejo::operator+=(complejo const &c)
-{
+complejo& complejo::operator+=(complejo const &c){
 	double re = re_ + c.re_;
 	double im = im_ + c.im_;
 	re_ = re, im_ = im;
 	return *this;
 }
 
-complejo const &
-complejo::operator-=(complejo const &c)
-{
+complejo& complejo::operator-=(complejo const &c){
 	double re = re_ - c.re_;
 	double im = im_ - c.im_;
 	re_ = re, im_ = im;
 	return *this;
 }
 
-complejo::~complejo()
-{
+complejo::~complejo(){
 }
 
-
-
-double
-complejo::re() const
-{
+double complejo::re() const{
 	return re_;
 }
 
-double complejo::im() const
-{
+double complejo::im() const{
 	return im_;
 }
 
-double
-complejo::modulo() const
-{
+double complejo::modulo() const{
 	return std::sqrt(re_ * re_ + im_ * im_);
 }
 
-double
-complejo::modulo2() const
-{
+double complejo::modulo2() const{
 	return re_ * re_ + im_ * im_;
 }
 
-double
-complejo::fase() const
-{
-	if(this->zero())
+double complejo::fase() const{
+	if(this->zero() || !im_)
 		return 0;
 
-    return atan2(im_,re_);//devuelve en grados
-//  return atan2(im_,re_)*180/3.14159265359 --> definir pi o usar el de la biblioteca
+    return atan2(im_,re_);
 }
 
 
-complejo const &
-complejo::conjugar()
-{
+complejo& complejo::conjugar(){
 	im_*= -1;
 	return *this;
 }
 
-complejo const
-complejo::conjugado() const
-{
+complejo complejo::conjugado() const{
 	return complejo(re_, -im_);
 }
 
-bool
-complejo::zero() const
-{
-#define ZERO(x) ((x) == +0.0 && (x) == -0.0)
-	return ZERO(re_) && ZERO(im_) ? true : false;
+bool complejo::zero() const{
+	return !re_ && !im_;
 }
 
 
-complejo const
-complejo::operator+(const complejo & r)
-{
-return complejo(this->re_ + r.re_ , this->im_ + r.im_);
+complejo complejo::operator+(const complejo & r) const{
+	return complejo(re_ + r.re_ , im_ + r.im_);
 }
 
 
-complejo const
-complejo::operator-(const complejo & r)
-
-{
-
-return complejo(re_ - r.re_ , im_ - r.im_);
-
+complejo complejo::operator-(const complejo & r) const{
+	return complejo(re_ - r.re_ , im_ - r.im_);
 }
 
-complejo const
-complejo::operator*(complejo const &x)
-{
-	complejo r(x.re_ * re_ - x.im_ * im_,
+complejo complejo::operator*(complejo const &x) const{
+	return complejo(x.re_ * re_ - x.im_ * im_,
 	          x.re_ * im_ + x.im_ * re_);
+}
+
+complejo complejo::operator/(complejo const &x) const{
+	if(x.zero())
+		return complejo(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+	complejo r;
+	r.re_ = (re_ * x.re_ + im_ * x.im_)/x.modulo2();
+	r.im_ = (im_ * x.re_ - re_ * x.im_)/x.modulo2();
 	return r;
 }
 
-complejo const
-complejo::operator/(complejo const &x)
-{
-	re_ = (re_*x.re_)/x.modulo2();
-	im_ = (im_*x.im_*-1)/x.modulo2();
-
-	return *this;
-}
-
-complejo const
-complejo::operator/(double f)
-{
+complejo complejo::operator/(double f) const{
 	return complejo(re_ / f, im_ / f);
 }
 
 
-bool
-operator==(complejo const &c, double f)
-{
-	bool b = (c.im_ != 0 || c.re_ != f) ? false : true;
-	return b;
+bool complejo::operator==(double f) const{
+	return re_ == f && !im_;
 }
 
-bool
-operator==(complejo const &x, complejo const &y)
-{
-	bool b = (x.re_ != y.re_ || x.im_ != y.im_) ? false : true;
-	return b;
+bool complejo::operator==(complejo const &r) const{
+	return re_ == r.re_ && im_ == r.im_;
+}
+
+bool complejo::operator!=(double f) const{
+	return re_ != f || im_;
+}
+
+bool complejo::operator!=(complejo const &r) const{
+	return re_ != r.re_ || im_ != r.im_;
 }
 
 ostream &
-operator<<(ostream &os, const complejo &c)
-{
+operator<<(ostream &os, const complejo &c){
 	return os << "("
 	          << c.re_
 	          << ", "
@@ -182,48 +141,22 @@ operator<<(ostream &os, const complejo &c)
 	          << ")";
 }
 
-complejo const
-complejo::logc() const
-{
-//	if(*this.zero())
-//		return 0;
-	double mod, ang;
-	mod= (*this).modulo();
-	mod = log(mod);
-	ang= (*this).fase();
-
-	return complejo(mod, ang);
+complejo complejo::logc() const{
+	return complejo(log(this->modulo()), this->fase());
 }
 
-
-complejo const
-complejo::expc() const
-{
-	double mod,fase;
-	mod = exp(re_)*cos(im_);
-	fase = exp(re_)*sin(im_);
-
-	return complejo(mod,fase);
+complejo complejo::expc() const{
+	return complejo(exp(re_)*cos(im_), exp(re_)*sin(im_));
 }
 
-complejo const & complejo::seno() {
-	double aux = re_;
-	re_ = sin(re_) * cosh(im_);
-	im_ = cos(aux) * sinh(im_);
-	return *this;
+complejo complejo::seno() const{
+	return complejo(sin(re_) * cosh(im_), cos(re_) * sinh(im_));
 }
 
-complejo const & complejo::coseno() {
-	double aux = re_;
-	re_ = cos(re_) * cosh(im_);
-	im_ = -sin(aux) * sinh(im_);
-	return *this;
+complejo complejo::coseno() const{
+	return complejo(cos(re_) * cosh(im_), -sin(re_) * sinh(im_));
 }
 
-complejo const
-complejo::operator^(complejo const & pot) {
-	std::cout<<"Aca1"<<std::endl;
-	this->logc();
-	std::cout<<"Aca2"<<std::endl;
-	return ((*this) * pot).expc();
+complejo complejo::operator^(complejo const & pot) const{
+	return (this->logc() * pot).expc();
 }
