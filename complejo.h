@@ -5,6 +5,7 @@
 
 class complejo {
 	double re_, im_;
+	complejo multiplicar_i() const;
 public:
 	complejo();
 	complejo(double);
@@ -30,6 +31,8 @@ public:
 	complejo expc() const;
 	complejo seno() const;
 	complejo coseno() const;
+	complejo senoh() const;
+	complejo cosenoh() const;
 	complejo operator+(complejo const &) const;
 	complejo operator-(complejo const &) const;
 	complejo operator*(complejo const &) const;

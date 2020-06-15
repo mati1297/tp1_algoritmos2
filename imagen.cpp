@@ -154,6 +154,12 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
           else if (s_aux == "cos"){
             l_aux.push(l_aux.pop().coseno());
           }
+          else if (s_aux == "sinh"){
+            l_aux.push(l_aux.pop().senoh());
+          }
+          else if (s_aux == "cosh"){
+            l_aux.push(l_aux.pop().cosenoh());
+          }
         }
         // Avanzo al iterador
         it = it.avanzar();

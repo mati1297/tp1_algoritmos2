@@ -199,8 +199,10 @@ void cargarVectorFunciones(string *funciones){
 	funciones[3] = "ln";
 	funciones[4] = "re";
 	funciones[5] = "im";
-	funciones[6] = "sin";
-	funciones[7] = "cos";
+	funciones[6] = "sinh";
+	funciones[7] = "cosh";
+	funciones[8] = "sin";
+	funciones[9] = "cos";
 }
 
 void cargarVectorCaracteresEspecial(string *caracteresEspecial){

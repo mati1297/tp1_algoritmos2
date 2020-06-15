@@ -141,20 +141,34 @@ operator<<(ostream &os, const complejo &c){
 	          << ")";
 }
 
-complejo complejo::logc() const{
+complejo complejo::logc() const {
 	return complejo(log(this->modulo()), this->fase());
 }
 
-complejo complejo::expc() const{
+complejo complejo::expc() const {
 	return complejo(exp(re_)*cos(im_), exp(re_)*sin(im_));
 }
 
-complejo complejo::seno() const{
+complejo complejo::seno() const {
 	return complejo(sin(re_) * cosh(im_), cos(re_) * sinh(im_));
 }
 
-complejo complejo::coseno() const{
+complejo complejo::coseno() const {
 	return complejo(cos(re_) * cosh(im_), -sin(re_) * sinh(im_));
+}
+
+complejo complejo::multiplicar_i() const {
+	return complejo(-im_,re_);
+}
+
+// cosh(z) = cos(iz)
+complejo complejo::senoh() const {
+	return (this->multiplicar_i()).coseno();
+}
+
+// sinh(z) = -i * sin(iz)
+complejo complejo::cosenoh() const {
+	return ((this->multiplicar_i()).seno()) * complejo(0,-1);
 }
 
 complejo complejo::operator^(complejo const & pot) const{
