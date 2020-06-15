@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
+#include <string>
 
 using namespace std;
 
@@ -15,6 +16,17 @@ complejo::complejo(double r, double i) : re_(r), im_(i){
 }
 
 complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_){
+}
+
+complejo::complejo(const string& st){
+	if(st == "j" || st == "i"){
+		re_ = 0;
+		im_ = 0;
+	}
+	else{
+		re_ = stod(st);
+		im_ = 0;
+	}
 }
 
 
@@ -125,14 +137,14 @@ bool complejo::operator!=(complejo const &r) const{
 	return re_ != r.re_ || im_ != r.im_;
 }
 
-ostream &
-operator<<(ostream &os, const complejo &c){
+ostream& operator<<(ostream &os, const complejo &c){
 	return os << "("
 	          << c.re_
 	          << ", "
 	          << c.im_
 	          << ")";
 }
+
 
 complejo complejo::logc() const {
 	return complejo(log(this->modulo()), this->fase());

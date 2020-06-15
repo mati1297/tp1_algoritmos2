@@ -19,8 +19,14 @@
 #define MSJ_ERROR_FUNCION_FINAL "Error: la entrada termina con una funcion"
 #define MSJ_ERROR_NUMERO_FUNC_SEG "Error: un numero no puede estar seguido de una funcion"
 #define MSJ_ERROR_PARENTESIS_VACIOS "Error: parentesis vacios"
+#define MSJ_ERROR_OPERADOR_INICIO "Error: la función empieza con un operador"
 
-
+#define FLAG_INICIO 0
+#define FLAG_OPERADOR 1
+#define FLAG_FUNCION 2
+#define FLAG_NUMERO 3
+#define FLAG_PARENTESIS 4
+#define CANT_FLAGS 5 
 
 #define OPERADORES_CANT 5
 #define FUNCIONES_CANT 11
@@ -34,6 +40,6 @@ string leerNumero(const string&);
 void cargarVectorOperadores(string *operadores);
 void cargarVectorFunciones(string *funciones);
 void cargarVectorCaracteresEspecial(string *caracteresEspecial);
-
+void subirFlag(bool*, int);
 
 #endif

@@ -2,6 +2,9 @@
 #define _COMPLEJO_H_INCLUDED_
 
 #include <iostream>
+#include <cmath>
+#include <limits>
+#include <string>
 
 class complejo {
 	double re_, im_;
@@ -9,6 +12,7 @@ public:
 	complejo();
 	complejo(double);
 	complejo(double, double);
+	complejo(const std::string&);
 	complejo(const complejo &);
 	complejo &operator=(complejo const &);
 	complejo &operator*=(complejo const &);
@@ -43,7 +47,6 @@ public:
 	bool operator!=(complejo const &) const;
 
 	friend std::ostream &operator<<(std::ostream &, const complejo &);
-	friend std::istream &operator>>(std::istream &, complejo &);
 };
 
 #endif

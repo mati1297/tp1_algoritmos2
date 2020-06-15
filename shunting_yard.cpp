@@ -22,68 +22,59 @@ lista<string> shuntingYard(string input){
 	static string caracteresEspecial[CARACTERES_ESPECIAL_CANT];
 	cargarVectorCaracteresEspecial(caracteresEspecial);
 
-	bool flagNumero = false;
-	bool flagOperador = false;
-	bool flagFuncion = false;
-	bool flagParentesis = false;
+	bool flags[CANT_FLAGS];
+	subirFlag(flags, FLAG_INICIO);
 
 
 	while(input.find_first_not_of(SPACE) != std::string::npos){
 		input = input.substr(input.find_first_not_of(SPACE));
 		if(isdigit(input[0])){
-			if(flagNumero){
-				cout << MSJ_ERROR_NUMEROS_SEG << endl;
-				exit(1);
+			if(flags[FLAG_NUMERO]){
+				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
+				exit(EXIT_FAILURE);
 			}
-			flagOperador = false;
-			flagFuncion = false;
-			flagParentesis = false;
-			flagNumero = true;
+			subirFlag(flags, FLAG_NUMERO);
 			extraido = leerNumero(input);
 			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
 		}
 
 		else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
-			if(flagNumero){
-				cout << MSJ_ERROR_NUMEROS_SEG << endl;
-				exit(1);
+			if(flags[FLAG_NUMERO]){
+				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
+				exit(EXIT_FAILURE);
 			}
-			flagOperador = false;
-			flagFuncion = false;
-			flagNumero = true;
-			flagParentesis = false;
+			subirFlag(flags, FLAG_NUMERO);
 			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
 		}
 
 
 		else if(!(extraido = leerToken(input, funciones, FUNCIONES_CANT)).empty()){
-			if(flagNumero){
-				cout << MSJ_ERROR_NUMERO_FUNC_SEG << endl;
-				exit(1);
+			if(flags[FLAG_NUMERO]){
+				cerr << MSJ_ERROR_NUMERO_FUNC_SEG << endl;
+				exit(EXIT_FAILURE);
 			}
-			flagFuncion = true;
-			flagOperador = false;
-			flagNumero = false;
-			flagParentesis = false;
+			subirFlag(flags, FLAG_FUNCION);
 			pila_operadores.push(extraido);
 			input = input.substr(extraido.length());
 		}
 
 
 		else if(!(extraido = leerToken(input, operadores, OPERADORES_CANT)).empty()){
-			if(flagOperador){
-				cout << MSJ_ERROR_OPERADORES_SEG << endl;
-				exit(1);
+			if(flags[FLAG_OPERADOR]){
+				cerr << MSJ_ERROR_OPERADORES_SEG << endl;
+				exit(EXIT_FAILURE);
 			}
-			if(flagFuncion){
-				cout << MSJ_ERROR_FUNC_OPERADOR_SEG << endl;
-				exit(1);
+			if(flags[FLAG_FUNCION]){
+				cerr << MSJ_ERROR_FUNC_OPERADOR_SEG << endl;
+				exit(EXIT_FAILURE);
 			}
-			flagOperador = true;
-			flagNumero = false;
-			flagParentesis = false;
+			if(flags[FLAG_INICIO]){
+				cerr << MSJ_ERROR_OPERADOR_INICIO << endl;
+				exit(EXIT_FAILURE);
+			}
+			subirFlag(flags, FLAG_OPERADOR);
 
 			while(pila_operadores.llena()){
 				const string operador_top = pila_operadores.mirarTop();
@@ -91,7 +82,7 @@ lista<string> shuntingYard(string input){
 					if((precedencia(operador_top, operadores) < precedencia(extraido, operadores)) || !izqAsoc(extraido))
 						break;
 				}
-				if(operador_top == "(")
+				if(operador_top == LEFT_SEPARATOR_OP)
 					break;
 
 				cola_salida.enqueue(pila_operadores.pop());
@@ -101,21 +92,21 @@ lista<string> shuntingYard(string input){
 		}
 
 		else if(!input.compare(0, 1, LEFT_SEPARATOR_OP)){
-			flagParentesis = true;
+			subirFlag(flags, FLAG_PARENTESIS);
 			string operador_insertar(1, input[0]);
 			pila_operadores.push(operador_insertar);
 			input = input.substr(1);
 		}
 		else if(!input.compare(0, 1, RIGHT_SEPARATOR_OP)){
-			if(flagParentesis){
-				cout << MSJ_ERROR_PARENTESIS_VACIOS << endl;
-				exit(1);
+			if(flags[FLAG_PARENTESIS]){
+				cerr << MSJ_ERROR_PARENTESIS_VACIOS << endl;
+				exit(EXIT_FAILURE);
 			}
-			flagParentesis = false;
+			flags[FLAG_PARENTESIS] = false;
 			while(1){
 				if(pila_operadores.vacia()){
-					cout << MSJ_ERROR_PARENTESIS << endl;
-					exit(1);
+					cerr << MSJ_ERROR_PARENTESIS << endl;
+					exit(EXIT_FAILURE);
 				}
 				const string operador_top = pila_operadores.mirarTop();
 				if(operador_top == LEFT_SEPARATOR_OP){
@@ -127,25 +118,25 @@ lista<string> shuntingYard(string input){
 			input = input.substr(1);
 		}
 		else{
-			cout << MSJ_ERROR_OPERADOR_DESC << endl;
-			exit(1);
+			cerr << MSJ_ERROR_OPERADOR_DESC << endl;
+			exit(EXIT_FAILURE);
 		}
 	} //fin del while
 
-	if(flagOperador){
-		cout << MSJ_ERROR_OPERADOR_FINAL << endl;
-		exit(1);
+	if(flags[FLAG_OPERADOR]){
+		cerr << MSJ_ERROR_OPERADOR_FINAL << endl;
+		exit(EXIT_FAILURE);
 	}
-	if(flagFuncion){
-		cout << MSJ_ERROR_FUNCION_FINAL << endl;
-		exit(1);
+	if(flags[FLAG_FUNCION]){
+		cerr << MSJ_ERROR_FUNCION_FINAL << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	while(pila_operadores.llena()){
 		const string operador_top = pila_operadores.pop();
 		if(operador_top == LEFT_SEPARATOR_OP){
-			cout << MSJ_ERROR_PARENTESIS << endl;
-			exit(1);
+			cerr << MSJ_ERROR_PARENTESIS << endl;
+			exit(EXIT_FAILURE);
 		}
 		cola_salida.enqueue(operador_top);
 	}
@@ -210,4 +201,12 @@ void cargarVectorCaracteresEspecial(string *caracteresEspecial){
 	caracteresEspecial[0] = "j";
 	caracteresEspecial[1] = "i";
 	caracteresEspecial[2] = "z";
+}
+//sube uno y baja los demas
+void subirFlag(bool* flags, int posicion){
+	for(int i = 0; i < CANT_FLAGS; i++){
+		flags[i] = false;
+		if(i == posicion)
+			flags[i] = true;
+	}
 }
