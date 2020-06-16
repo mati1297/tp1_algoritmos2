@@ -34,7 +34,7 @@ public:
 	complejo operator+(complejo const &) const;
 	complejo operator-(complejo const &) const;
 	complejo operator*(complejo const &) const;
-	complejo operator/(complejo const &) const;
+	complejo operator/(complejo const &) const; //En caso de division por 0 o 0/0, devuelve parte real e imaginaria como inf.
 	complejo operator/(double) const; //Divide por un numero real.
 	complejo& operator=(complejo const &);
 	complejo& operator*=(complejo const &);
