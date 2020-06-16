@@ -1,0 +1,20 @@
+./imagen --input imagen_no_existe.pgm -o salida.pgm
+./imagen -f
+./imagen -o
+./imagen -a
+./imagen -i imagenes_prueba/0x2.pgm --output salida.pgm -f "exp(z)"
+./imagen -i imagenes_prueba/menos_pix_declarados.pgm -o salida.pgm -f "z^2"
+./imagen -i imagenes_prueba/header_incorrecto.pgm -o salida.pgm
+./imagen -i imagenes_prueba/intensidad0.pgm
+./imagen -i imagenes_prueba/cols_negativas.pgm
+./imagen -i imagenes_prueba/filas_negativas.pgm
+./imagen -i imagenes_prueba/comentario_entre_pixeles.pgm
+./imagen -i imagenes_prueba/comentario_sin_#.pgm
+./imagen -i imagenes_prueba/linea_vacia_entre_datos.pgm
+./imagen -i imagenes_prueba/baboon.pgm -f "-z * 2"
+./imagen -i imagenes_prueba/baboon.pgm -f "z * () - 2"
+./imagen -i imagenes_prueba/baboon.pgm -f "z *(3 + (2-1)"
+./imagen -i imagenes_prueba/baboon.pgm -f "2 3.212 * 4"
+./imagen -i imagenes_prueba/baboon.pgm -f "funcionquenoexiste(3)"
+./imagen -i imagenes_prueba/baboon.pgm -f "sin * 3"
+./imagen -i imagenes_prueba/baboon.pgm -f "cosh"
