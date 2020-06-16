@@ -197,7 +197,7 @@ void cargarVectorOperadores(string *operadores){
 
 /* Si hay funciones cuyo nombre contenga totalmente al de otra, esta debe ir
  * primero en el vector (por ejemplo: sinh contiene a sin. Por lo tanto sinh
- * debe ir antes en el vector que sin).
+ * debe ir antes en el vector que sin).*/
 void cargarVectorFunciones(string *funciones){
 	funciones[0] = "abs";
 	funciones[1] = "phase";
