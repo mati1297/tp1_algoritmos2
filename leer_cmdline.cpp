@@ -51,8 +51,6 @@ lista<string> leer_cmdline(int argc, char * const argv[], istream*& input_, ostr
   output_file_ = &output_file;
 
   //Se devuelve la lista ordenada por shunting yard.
-  std::cout<<"Esto le devuelvo al main:"<<funcion<<std::endl;
-  std::cout<<"Largo de funcion:"<<funcion.getTamano()<<std::endl;
   return funcion;
 }
 
@@ -90,16 +88,11 @@ static void opt_output(string const & arg) {
 }
 
 static void opt_funcion(string const & arg) {
-  std::cout<<funcion<<std::endl;
-  std::cout<<arg<<std::endl;
-
   if(arg == "-") {
     funcion.push("z");
   } else {
     funcion = lista<string>(shuntingYard(arg));
   }
-
-  std::cout<<funcion<<std::endl;
 }
 
 static void opt_help(string const & arg) {

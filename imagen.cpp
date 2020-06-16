@@ -125,9 +125,6 @@ Imagen Imagen::transformar(const lista<string> funcion) const{
         it = it.avanzar();
       } // fin del while
 
-      if (l_aux.getTamano() != 1){
-        std::cout<<"(✿╹◡╹) <(Error de la re concha de tu madre)"<<endl;
-      }
       // El ultimo elemento que quedo en la lista aux. es el complejo resultado
       c_aux = l_aux.pop();
       //std::cout<<c_aux<<std::endl;
