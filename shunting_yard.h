@@ -32,14 +32,35 @@
 #define FUNCIONES_CANT 11
 #define CARACTERES_ESPECIAL_CANT 3
 
+/*Metodo principal, se le pasa una cadena con la funcion infix, y devuelve
+ * una lista con las funciones, operadores y operandos validados y en 
+ * notacion polaca invertida */
 lista<string> shuntingYard(string);
-bool izqAsoc(const string&);
+
+bool izqAsoc(const string&); //Devuelve true si el operador es asociado a izquierda
+
+/* Devuelve la precedencia de un operador/funcion, las funciones tienen mayor precedencia
+ * que los operadores siempre. Se le debe pasar ademas el vector de operadores.*/
 int precedencia(const string&, const string*);
+
+/* Lee el primer token presente en el string que tambien se encuentre en el vector que se le
+ * pasa. Ademas se le debe pasar el tamaño del vector de strings con que se va a comparar. 
+ * En caso de no encontrar coincidencias se devuelve un string vacio.*/
 string leerToken(const string&, const string*, const size_t);
+
+/* Lee el numero que se encuentra en la cadena hasta que encuentre un caracter no
+ * numerico (el '.' es conciderado un numero). En caso de no encontrar ninguno devuelve
+ * una cadena vacia. */
 string leerNumero(const string&);
+
+/*Funciones que se encargan de cargar los vectores de operadores, etc.*/
 void cargarVectorOperadores(string *operadores);
 void cargarVectorFunciones(string *funciones);
 void cargarVectorCaracteresEspecial(string *caracteresEspecial);
+
+/*Pone en "true" el booleano correspondiente a la posicion que se le pase y 
+ * todos los demas en false. En caso de pasarse un numero fuera de rango deja
+ * todo seteado en false. */
 void subirFlag(bool*, int);
 
 #endif

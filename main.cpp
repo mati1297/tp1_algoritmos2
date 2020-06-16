@@ -7,15 +7,6 @@
 
 
 using namespace std;
-/*
-	if(argc < 2)
-		return 0;
-
-	lista<string> argumentos = shuntingYard(argv[1]);
-
-	cout << argumentos << endl;
-	prueba_transf = prueba.transformar(argumentos);
-*/
 
 int main(int argc, char * const argv[]) {
   /*Variables que se cargan con la funcion leer_argumentos

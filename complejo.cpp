@@ -162,12 +162,10 @@ complejo complejo::coseno() const {
 	return complejo(cos(re_) * cosh(im_), -sin(re_) * sinh(im_));
 }
 
-// cosh(z) = cos(iz)
 complejo complejo::senoh() const {
 	return (*this * complejo(0,1)).coseno();
 }
 
-// sinh(z) = -i * sin(iz)
 complejo complejo::cosenoh() const {
 	return ((*this * complejo(0,1)).seno()) * complejo(0,-1);
 }

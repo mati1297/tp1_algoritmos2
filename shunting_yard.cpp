@@ -5,16 +5,16 @@
 #include <cstring>
 
 
-//ATENCION, ESTE CODIGO DEBE PERFECCIONARSE INTERNAMENTE (MATI NO CUELGUES, FIRMA MATI)
-//RETOCAR LO DE LOS PARENTESIS Y LAS STRING
 using namespace std;
 
 lista<string> shuntingYard(string input){
+	//Se crean la pila de operadores y la cola de salida. Dos listas
+	//del mismo tipo pero utilizadas de maneras diferentes.
 	lista<string> cola_salida;
 	lista<string> pila_operadores;
 	string extraido;
 
-	//Por ahora defino los vectores aca hasta que nos entreguen el tp0 para ver si hay que cambiar algo.
+	//Se crean y cargan los vectores con operadores, funciones, etc.
 	static string operadores[OPERADORES_CANT];
 	cargarVectorOperadores(operadores);
 	static string funciones[FUNCIONES_CANT];
@@ -22,12 +22,15 @@ lista<string> shuntingYard(string input){
 	static string caracteresEspecial[CARACTERES_ESPECIAL_CANT];
 	cargarVectorCaracteresEspecial(caracteresEspecial);
 
+	//Se crea el vector de flags y se setea en true el flag de inicio.
 	bool flags[CANT_FLAGS];
 	subirFlag(flags, FLAG_INICIO);
 
-
+	//Mientras haya caracteres para leer.
 	while(input.find_first_not_of(SPACE) != std::string::npos){
 		input = input.substr(input.find_first_not_of(SPACE));
+		
+		//Si es un numero se guarda en la cola de salida
 		if(isdigit(input[0])){
 			if(flags[FLAG_NUMERO]){
 				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
@@ -38,7 +41,9 @@ lista<string> shuntingYard(string input){
 			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
 		}
-
+		
+		//Si es un caracter especial tambien se reconoce como numero y se
+		//guarda en la cola de salida.
 		else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
 			if(flags[FLAG_NUMERO]){
 				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
@@ -49,7 +54,7 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 
-
+		//Si es una funcion se guarda en la pila de operadores
 		else if(!(extraido = leerToken(input, funciones, FUNCIONES_CANT)).empty()){
 			if(flags[FLAG_NUMERO]){
 				cerr << MSJ_ERROR_NUMERO_FUNC_SEG << endl;
@@ -60,7 +65,8 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 
-
+		//Si es un operador se guarda en la pila de operadores una vez que se haya chequeado
+		//que no hay otros operadores esperando en la lista que deben ir antes del extraido.
 		else if(!(extraido = leerToken(input, operadores, OPERADORES_CANT)).empty()){
 			if(flags[FLAG_OPERADOR]){
 				cerr << MSJ_ERROR_OPERADORES_SEG << endl;
@@ -91,12 +97,16 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 
+		//Si es un parentesis izquierdo se guarda en la pila.
 		else if(!input.compare(0, 1, LEFT_SEPARATOR_OP)){
 			subirFlag(flags, FLAG_PARENTESIS);
 			string operador_insertar(1, input[0]);
 			pila_operadores.push(operador_insertar);
 			input = input.substr(1);
 		}
+		
+		//Si es un operador derecho, se saca todo de la pila hasta
+		//encontrar el parentesis izquierdo.
 		else if(!input.compare(0, 1, RIGHT_SEPARATOR_OP)){
 			if(flags[FLAG_PARENTESIS]){
 				cerr << MSJ_ERROR_PARENTESIS_VACIOS << endl;
@@ -121,7 +131,7 @@ lista<string> shuntingYard(string input){
 			cerr << MSJ_ERROR_OPERADOR_DESC << endl;
 			exit(EXIT_FAILURE);
 		}
-	} //fin del while
+	}
 
 	if(flags[FLAG_OPERADOR]){
 		cerr << MSJ_ERROR_OPERADOR_FINAL << endl;
@@ -132,6 +142,7 @@ lista<string> shuntingYard(string input){
 		exit(EXIT_FAILURE);
 	}
 
+	//Se sacan todos los operadores que hayan quedado en la pila.
 	while(pila_operadores.llena()){
 		const string operador_top = pila_operadores.pop();
 		if(operador_top == LEFT_SEPARATOR_OP){
@@ -174,7 +185,8 @@ string leerNumero(const string& input){
 	return numero;
 }
 
-//Aclarar operadores en orden de precedencia creciente
+/*Los operadores deben ir colocados en orden de precedencia, en orden creciente
+ * (los de menor precedencia al principio */
 void cargarVectorOperadores(string *operadores){
 	operadores[0] = "+";
 	operadores[1] = "-";
@@ -183,6 +195,9 @@ void cargarVectorOperadores(string *operadores){
 	operadores[4] = "^";
 }
 
+/* Si hay funciones cuyo nombre contenga totalmente al de otra, esta debe ir
+ * primero en el vector (por ejemplo: sinh contiene a sin. Por lo tanto sinh
+ * debe ir antes en el vector que sin).
 void cargarVectorFunciones(string *funciones){
 	funciones[0] = "abs";
 	funciones[1] = "phase";
@@ -202,7 +217,8 @@ void cargarVectorCaracteresEspecial(string *caracteresEspecial){
 	caracteresEspecial[1] = "i";
 	caracteresEspecial[2] = "z";
 }
-//sube uno y baja los demas
+
+
 void subirFlag(bool* flags, int posicion){
 	for(int i = 0; i < CANT_FLAGS; i++){
 		flags[i] = false;

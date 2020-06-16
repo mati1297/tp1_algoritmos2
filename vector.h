@@ -9,12 +9,12 @@ using namespace std;
 
 template <typename T>
 class Vector {
-      T *ptr; // Apunta a la primer poscicion del vector
+      T *ptr; //Puntero a la primera posición del vector
       size_t size;
 
       public:
         Vector(); // Constructor por defecto
-        Vector(const size_t); // Constructor por parametros
+        Vector(const size_t); // Constructores por parametros
         Vector(const size_t, const T&);
         Vector(const Vector & ); // Constructor por copia
         ~Vector(); // Destructor
@@ -23,6 +23,11 @@ class Vector {
         Vector & operator=(const Vector&);
         bool operator==(const Vector&) const;
         bool operator!=(const Vector&) const;
+        
+        /*Permiten cambiar el tamano del vector, se le puede pasar
+         * como segundo parametro el valor por defecto para rellenar
+         * en caso de que se agrande, de lo contrario rellena con
+         * valor nulo del tipo de dato */
         void resize(const size_t);
         void resize(const size_t, const T&);
         
@@ -95,7 +100,6 @@ T& Vector<T>::operator[](const size_t index) const {
   if (index < size) {
     return ptr[index];
   }
-  // Si evaluo donde no deberia me devuelve el primer elemento
   return *ptr;
 }
 

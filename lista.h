@@ -5,14 +5,19 @@
 
 using namespace std;
 
+/*Clase lista: lista doblemente enlazada. Contiene un iterador
+ * con el que se puede recorrer la lista. Ademas contiene metodos
+ * para poder utilizar la lista como pila y/o cola.*/
 template <typename T>
 class lista{
+	/* Clase nodo: es la unidad basica de la que esta
+	 * compuesta la lista*/
 	class nodo{
 		friend class lista;
-
+		/* Punteros al nodo siguiente y el anterior*/
 		nodo* sig;
 		nodo* ant;
-		T dato;
+		T dato; //Dato
 
 	public:
 		nodo();
@@ -20,17 +25,19 @@ class lista{
 		~nodo();
 	};
 
+	/* Punteros al primer y ultimo elemento de la lista */
 	nodo* pri;
 	nodo* ult;
 	size_t tam;
 
 public:
-
+	/*Clase iterador: permite iterar por la lista de manera sencilla*/
 	class iterador{
 		friend class lista;
 
-		nodo *actual;
-		iterador(nodo*);
+		nodo *actual; //Puntero al nodo al que apunta actualmente el iterador
+		
+		iterador(nodo*); //Constructor al que se le pasa el nodo al que se quiere apuntar.
 
 	public:
 		//Constructores
@@ -40,7 +47,7 @@ public:
 
 		~iterador();
 
-		T& dato(); //Devuelve dato de nodo actual
+		T& dato(); //Devuelve dato de nodo actual (permite editar).
 		const T& dato() const; //Devuelve dato de nodo actual
 		iterador &avanzar(); //Avanza al nodo siguiente
 		iterador &retroceder(); //Retrocede al nodo anterior
@@ -53,14 +60,14 @@ public:
 
 	};
 
-
+	//Definiciones de tipos.
 	typedef T t_dato;
 	typedef nodo t_nodo;
 	typedef iterador t_iter;
 
 	//Constructores
 	lista(); //Defecto
-	lista(const lista&); //Copia lista
+	lista(const lista&); //Copia
 
 	~lista();
 
@@ -69,15 +76,18 @@ public:
 	bool llena() const; //Chequea si esta llena
 	size_t getTamano() const; //Devuelve el tamano
 	void push(const T&); //Inserta al principio de la lista
-	const T& mirarTop();
 	T pop(); //Extrae el dato del principio de la lista
 	void enqueue(const T&); //Agrega un dato al principio de la lista
 	T dequeue(); //Extrae el dato del final de la lista
+	const T& mirarTop(); //Permite ver el principio de la lista sin extraerlo.
+	const T& mirarBottom(); //Permite ver el final de la lista sin extraerlo.
+
 
 	iterador primero() const; //Devuelve un iterador al principio de la lista
 	iterador ultimo() const; //Devuelve un iterador al final de la lista
 
-	template<typename U> friend std::ostream& operator<<(std::ostream&, const lista<U>&);
+	template<typename U> 
+	friend std::ostream& operator<<(std::ostream&, const lista<U>&);
 };
 
 
@@ -296,13 +306,6 @@ T lista<T>::pop(){
 }
 
 template <typename T>
-const T& lista<T>::mirarTop(){
-	if(tam < 1)
-		throw std::logic_error("");
-	return pri->dato;
-}
-
-template <typename T>
 void lista<T>::enqueue(const T& dato_){
 	nodo * aux = new nodo(dato_);
 	aux->sig = 0;
@@ -333,6 +336,20 @@ T lista<T>::dequeue(){
 	tam--;
 	delete p;
 	return dato_;
+}
+
+template <typename T>
+const T& lista<T>::mirarTop(){
+	if(tam < 1)
+		throw std::logic_error("");
+	return pri->dato;
+}
+
+template <typename T>
+const T& lista<T>::mirarBottom(){
+	if(tam < 1)
+		throw std::logic_error("");
+	return ult->dato;
 }
 
 
