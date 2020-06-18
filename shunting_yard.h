@@ -29,7 +29,7 @@
 #define CANT_FLAGS 5 
 
 #define OPERADORES_CANT 5
-#define FUNCIONES_CANT 13
+#define FUNCIONES_CANT 12
 #define CARACTERES_ESPECIAL_CANT 3
 
 /*Metodo principal, se le pasa una cadena con la funcion infix, y devuelve

@@ -171,8 +171,3 @@ complejo complejo::arctan() const{
 	return (((i*(*this) + 1).logc() - (i*(-1)*(*this) + 1).logc())/(i*2));
 }
 
-//arccos(z) = 1/i * ln(z + (z^2-1)^(1/2))
-complejo complejo::arccos() const{
-	complejo i(0, 1);
-	return ((*this) + ((((*this)^2)-1)^(1/2))).logc()/i;
-}

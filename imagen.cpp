@@ -197,9 +197,6 @@ void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_c
   else if (string_aux == "arctan"){
     pila_complejos.push(pila_complejos.pop().arctan());
   }
-  else if (string_aux == "arccos"){
-    pila_complejos.push(pila_complejos.pop().arccos());
-  }
 }
 
 int Imagen::setIntensidad(std::string& input) {
