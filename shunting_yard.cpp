@@ -31,7 +31,7 @@ lista<string> shuntingYard(string input){
 		input = input.substr(input.find_first_not_of(SPACE));
 		
 		//Si es un numero se guarda en la cola de salida
-		if(isdigit(input[0])){
+		if(input.find_first_of(CHARS_NUMBERS) == 0){
 			if(flags[FLAG_NUMERO]){
 				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
 				exit(EXIT_FAILURE);
@@ -42,17 +42,6 @@ lista<string> shuntingYard(string input){
 			input = input.substr(extraido.length());
 		}
 		
-		//Si es un caracter especial tambien se reconoce como numero y se
-		//guarda en la cola de salida.
-		else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
-			if(flags[FLAG_NUMERO]){
-				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
-				exit(EXIT_FAILURE);
-			}
-			subirFlag(flags, FLAG_NUMERO);
-			cola_salida.enqueue(extraido);
-			input = input.substr(extraido.length());
-		}
 
 		//Si es una funcion se guarda en la pila de operadores
 		else if(!(extraido = leerToken(input, funciones, FUNCIONES_CANT)).empty()){
@@ -94,6 +83,19 @@ lista<string> shuntingYard(string input){
 				cola_salida.enqueue(pila_operadores.pop());
 			}
 			pila_operadores.push(extraido);
+			input = input.substr(extraido.length());
+		}
+		
+		
+		//Si es un caracter especial tambien se reconoce como numero y se
+		//guarda en la cola de salida.
+		else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
+			if(flags[FLAG_NUMERO]){
+				cerr << MSJ_ERROR_NUMEROS_SEG << endl;
+				exit(EXIT_FAILURE);
+			}
+			subirFlag(flags, FLAG_NUMERO);
+			cola_salida.enqueue(extraido);
 			input = input.substr(extraido.length());
 		}
 
