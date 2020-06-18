@@ -12,22 +12,21 @@ public:
 	complejo(); //Constructor por defecto
 	complejo(double); //Constructor parte real
 	complejo(double, double); //Constructor parte real e imaginaria.
-	complejo(const std::string&); //Constructor a partir de cadena.
 	complejo(const complejo &); //Constructor por copia
 	~complejo();
-	
+
 	void SetReal(double xx){re_=xx;} //Set parte real
 	void SetImag(double yy){im_=yy;} //Set parte imaginaria
 	double re() const; //Devuelve parte real
 	double im() const; //Devuelve parte imaginaria
 	double modulo() const; //Devuelve el modulo
-	double modulo2() const; //Devuelve el modulo al cuadrado 
+	double modulo2() const; //Devuelve el modulo al cuadrado
 	double fase() const; //Devuelve el argumento
 	complejo conjugado() const; //Devuelve el complejo conjugado
 	bool zero() const; //Devuelve true si parte real e imaginaria son 0
 	complejo expc() const;
 	complejo logc() const; //Logaritmo en base e.
-	complejo seno() const; 
+	complejo seno() const;
 	complejo coseno() const;
 	complejo senoh() const;
 	complejo cosenoh() const;

@@ -18,17 +18,6 @@ complejo::complejo(double r, double i) : re_(r), im_(i){
 complejo::complejo(complejo const &c) : re_(c.re_), im_(c.im_){
 }
 
-complejo::complejo(const string& st){
-	if(st == "j" || st == "i"){
-		re_ = 0;
-		im_ = 0;
-	}
-	else{
-		re_ = stod(st);
-		im_ = 0;
-	}
-}
-
 
 complejo& complejo::operator=(complejo const &c){
 	re_ = c.re_;
