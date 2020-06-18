@@ -83,64 +83,64 @@ int Imagen::getIntensidad() const{
   return intensidad;
 }
 
-Imagen Imagen::transformar(const lista<string> funcion) const{
-  Imagen im_aux = Imagen(filas, columnas, intensidad, VALOR_DEF);
+/* funcion ordenada es una pila ordenada por shunting yard de f(z)*/
+Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
+  Imagen imagen_aux = Imagen(filas, columnas, intensidad, VALOR_DEF);
   double x, y, x_0 = columnas/2, y_0 = filas/2;
   // Inicializo el iterador al principio de la lista (sabiendo que ya es correcta y fue validada antes)
-  lista<string>::iterador it = lista<string>::iterador(funcion);
-  lista<complejo> l_aux;
-  string s_aux;
-  complejo c_aux;
+  lista<string>::iterador iter = lista<string>::iterador(funcion_ordenada);
+  lista<complejo> pila_aux;
+  string str_aux;
+  complejo complejo_aux;
 
   for(int i = 0; i < filas;i++) {
     for(int j=0;j<columnas;j++){
-      // aplico la transformacion lineal para mapear al rectangulo de lado 2
+      // Aplico la transformacion lineal para mapear al rectangulo de lado 2
       x = j/x_0-1;
       y = 1-i/y_0;
 
-      // inicializo el iterador
-      it = funcion.primero();
+      // Inicializo el iterador
+      iter = funcion_ordenada.primero();
 
       // realizo el algoritmo de evaluacion con la funcion dada por la lista
-      // El dato puede ser 'z' 'j' 'numero' 'operador' 'funcion'
-      while (it.extremo() != true) {
-        s_aux = it.dato();
+      // El dato puede ser 'z' 'j' (o 'i') 'numero' 'operador' o 'funcion'
+      while (iter.extremo() != true) {
+        str_aux = iter.dato();
 
-        if (isdigit(s_aux[0]) || (s_aux[0] == '.')) {
-          l_aux.push(complejo(stod(s_aux),0));
+        if (isdigit(str_aux[0]) || (str_aux[0] == '.')) {
+          pila_aux.push(complejo(stod(str_aux),0));
         }
-        else if (s_aux == "z") {
-          l_aux.push(complejo(x,y));
-        }
-        else if ((s_aux == "j")||(s_aux == "i")) {
-          l_aux.push(complejo(0,1));
+        else if (str_aux == "z") {
+          pila_aux.push(complejo(x,y));
+        } // Se aceptan tanto j como i como variable compleja
+        else if ((str_aux == "j")||(str_aux == "i")) {
+          pila_aux.push(complejo(0,1));
         } // Veo si es un operador (largo 1)
-        else if (s_aux.length() == 1){
-          evaluar_operador(s_aux, l_aux);
-        } // Realizo las funciones
+        else if (str_aux.length() == 1){
+          evaluar_operador(str_aux, pila_aux);
+        } // Si no es nada de lo anterior, al ya estar validado, es una funcion
         else {
-          evaluar_funcion(s_aux, l_aux);
+          evaluar_funcion(str_aux, pila_aux);
         }
         // Avanzo al iterador
-        it = it.avanzar();
+        iter = iter.avanzar();
       } // fin del while
 
       // El ultimo elemento que quedo en la lista aux. es el complejo resultado
-      c_aux = l_aux.pop();
-      //std::cout<<c_aux<<std::endl;
+      complejo_aux = pila_aux.pop();
 
       // realizo la transformacion lineal inversa"ln"){
-      x = (int) (x_0 * (1 + c_aux.re()));
-      y = (int) (y_0 * (1 - c_aux.im()));
+      x = (int) (x_0 * (1 + complejo_aux.re()));
+      y = (int) (y_0 * (1 - complejo_aux.im()));
 
       if ((x < 0) || (x >= columnas) || (y < 0) || (y >= filas)){
-				im_aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
+				imagen_aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
 			} else {
-				im_aux.matriz[i][j] = this->matriz[y][x];
+				imagen_aux.matriz[i][j] = this->matriz[y][x];
       }
     }
   }
-  return im_aux;
+  return imagen_aux;
 }
 
 void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_complejos) const {

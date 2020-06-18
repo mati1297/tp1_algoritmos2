@@ -64,8 +64,14 @@ private:
   /*Actualiza el tamaño de la matriz al tamaño actual que indica los atributos columnas y filas*/
   int resizeMatriz();
 
+  /* Recibe una pila& de complejos y evalua un operador recibido por const string &
+  mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo
+  deja en al pila */
   void evaluar_operador(const string &, lista<complejo> &) const;
 
+  /* Recibe una pila& de complejos y evalua una funcion recibido por const string &
+  mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo
+  deja en al pila */
   void evaluar_funcion(const string &, lista<complejo> &) const;
 
 public:
@@ -107,6 +113,8 @@ public:
   /*Getter para intensidad maxima*/
   int getIntensidad() const;
 
+  /* El metodo recibe una lista de strings que reprensenta
+  una funcion f(z) ordenada y validada por el algoritmo de shunting yard*/
   Imagen transformar(const lista<string>) const;
 
   /* Metodo para cargar una imagen a partir de un archivo PGM.
