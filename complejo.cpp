@@ -91,6 +91,7 @@ complejo complejo::operator-(const complejo & r) const{
 	return complejo(re_ - r.re_ , im_ - r.im_);
 }
 
+
 complejo complejo::operator*(complejo const &x) const{
 	return complejo(x.re_ * re_ - x.im_ * im_,
 	          x.re_ * im_ + x.im_ * re_);
@@ -109,6 +110,9 @@ complejo complejo::operator/(double f) const{
 	return complejo(re_ / f, im_ / f);
 }
 
+complejo complejo::operator^(complejo const & pot) const{
+	return (this->logc() * pot).expc();
+}
 
 bool complejo::operator==(double f) const{
 	return re_ == f && !im_;
@@ -151,14 +155,24 @@ complejo complejo::coseno() const {
 	return complejo(cos(re_) * cosh(im_), -sin(re_) * sinh(im_));
 }
 
+// sinh(z) = sin(z * i) * (-i)
 complejo complejo::senoh() const {
-	return (*this * complejo(0,1)).coseno();
-}
-
-complejo complejo::cosenoh() const {
 	return ((*this * complejo(0,1)).seno()) * complejo(0,-1);
 }
 
-complejo complejo::operator^(complejo const & pot) const{
-	return (this->logc() * pot).expc();
+// cosh(z) = cos(z * i)
+complejo complejo::cosenoh() const {
+	return (*this * complejo(0,1)).coseno();
+}
+
+// arctan(z) = 1/2i * (ln(1+iz)-ln(1-iz))
+complejo complejo::arctan() const{
+	complejo i(0, 1);
+	return (((i*(*this) + 1).logc() - (i*(-1)*(*this) + 1).logc())/(i*2));
+}
+
+//arccos(z) = 1/i * ln(z + (z^2-1)^(1/2))
+complejo complejo::arccos() const{
+	complejo i(0, 1);
+	return ((*this) + ((((*this)^2)-1)^(1/2))).logc()/i;
 }

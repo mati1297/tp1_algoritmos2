@@ -30,6 +30,8 @@ public:
 	complejo coseno() const;
 	complejo senoh() const;
 	complejo cosenoh() const;
+	complejo arctan() const;
+	complejo arccos() const;
 	complejo operator+(complejo const &) const;
 	complejo operator-(complejo const &) const;
 	complejo operator*(complejo const &) const;

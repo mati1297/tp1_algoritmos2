@@ -212,6 +212,8 @@ void cargarVectorFunciones(string *funciones){
 	funciones[8] = "sin";
 	funciones[9] = "cos";
 	funciones[10] = "conj";
+	funciones[11] = "arctan";
+	funciones[12] = "arccos";
 }
 
 void cargarVectorCaracteresEspecial(string *caracteresEspecial){
