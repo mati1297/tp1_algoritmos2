@@ -134,9 +134,9 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
       y = (int) (y_0 * (1 - complejo_aux.im()));
 
       if ((x < 0) || (x >= columnas) || (y < 0) || (y >= filas)){
-				imagen_aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
-			} else {
-				imagen_aux.matriz[i][j] = this->matriz[y][x];
+        imagen_aux.matriz[i][j] = 0;  // Si cae fuera del rango la pongo en 0 (negro.)
+      } else {
+        imagen_aux.matriz[i][j] = this->matriz[y][x];
       }
     }
   }
@@ -205,12 +205,12 @@ int Imagen::setIntensidad(std::string& input) {
     intensidad = stoi(input, &lectura);
   }
   catch(std::invalid_argument& err){
-	std::cerr << MSJ_ERROR_INTENSIDAD<< std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_INTENSIDAD<< std::endl;
+  return 1;
   }
   if(intensidad <= 0){
-	std::cerr << MSJ_ERROR_INTENSIDAD_INVALIDA << std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_INTENSIDAD_INVALIDA << std::endl;
+  return 1;
   }
   input = input.substr(lectura);
   return 0;
@@ -222,12 +222,12 @@ int Imagen::setColumnas(std::string& input){
     columnas = stoi(input, &lectura);
   }
   catch(std::invalid_argument& err){
-	std::cerr << MSJ_ERROR_COLUMNAS << std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_COLUMNAS << std::endl;
+  return 1;
   }
   if(columnas <= 0){
-	std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
+  return 1;
   }
   input = input.substr(lectura);
   return 0;
@@ -239,19 +239,19 @@ int Imagen::setFilas(std::string& input){
     filas = stoi(input, &lectura);
   }
   catch(std::invalid_argument& err){
-	std::cerr << MSJ_ERROR_FILAS << std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_FILAS << std::endl;
+  return 1;
   }
   if(filas<=0){
-	std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
-	return 1;
+  std::cerr << MSJ_ERROR_TAMANO_INVALIDO << std::endl;
+  return 1;
   }
   input = input.substr(lectura);
   return 0;
 }
 
 int Imagen::setMatriz(std::istream& input){
-	/*Se leen los datos de cada pixel de la imagen del archivo .pgm. No permite
+  /*Se leen los datos de cada pixel de la imagen del archivo .pgm. No permite
    * comentarios entre lineas. No importa la cantidad de pixeles que
    * haya por linea, se leen de corrido hasta que se complete la fila.
    * Si hay menos pixeles de los indicados, el programa termina con
@@ -263,26 +263,26 @@ int Imagen::setMatriz(std::istream& input){
   while(getline(input, line)){
     if(line.find_first_not_of(SPACE) == std::string::npos){
       std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
-	  return 1;
-	}
+    return 1;
+  }
     line = line.substr(line.find_first_not_of(SPACE));
     if(line[0] != PGM_COMENTARIO)
       break;
   }
 
   for(int i = 0; i < filas; i++){
-	for(int j = 0; j < columnas; j++){
-	  if(line.find_first_not_of(SPACE) == std::string::npos){
-	    if(!getline(input, line)){
-		  std::cerr << MSJ_ERROR_TAMANO << std::endl;
+  for(int j = 0; j < columnas; j++){
+    if(line.find_first_not_of(SPACE) == std::string::npos){
+      if(!getline(input, line)){
+      std::cerr << MSJ_ERROR_TAMANO << std::endl;
           return 1;
-	    }
+      }
         if(line.find_first_not_of(SPACE) == std::string::npos){ //Hay una linea vacia
-		  std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
-		  return 1;
-		}
-	  }
-	  try{
+      std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
+      return 1;
+    }
+    }
+    try{
         matriz[i][j] = std::stoi(line, &lectura);
       }
       catch(std::invalid_argument &err){
@@ -338,8 +338,8 @@ int Imagen::readPGM(std::istream& input){
   while(getline(input, line)){
     if(line.find_first_not_of(SPACE) == std::string::npos){
       std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
-	  return EXIT_FAILURE;
-	}
+    return EXIT_FAILURE;
+  }
     line = line.substr(line.find_first_not_of(SPACE));
     if(line[0] != PGM_COMENTARIO)
       break;
@@ -357,29 +357,29 @@ int Imagen::readPGM(std::istream& input){
   while(getline(input, line)){
     if(line.find_first_not_of(SPACE) == std::string::npos){
       std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
-	  return EXIT_FAILURE;
-	}
+    return EXIT_FAILURE;
+  }
     line = line.substr(line.find_first_not_of(SPACE));
     if(line[0] != PGM_COMENTARIO)
       break;
   }
 
   if(setColumnas(line))
-	return EXIT_FAILURE;
+  return EXIT_FAILURE;
 
   if(setFilas(line))
-	return EXIT_FAILURE;
+  return EXIT_FAILURE;
 
   if(resizeMatriz())
-	return EXIT_FAILURE;
+  return EXIT_FAILURE;
 
 
   /*Lee el valor de intensidad dado en el archivo .pgm*/
   while(getline(input, line)){
     if(line.find_first_not_of(SPACE) == std::string::npos){
       std::cerr << MSJ_ERROR_LINEA_VACIA << std::endl;
-	  return EXIT_FAILURE;
-	}
+    return EXIT_FAILURE;
+  }
     line = line.substr(line.find_first_not_of(SPACE));
     if(line[0] != PGM_COMENTARIO)
       break;
@@ -392,7 +392,7 @@ int Imagen::readPGM(std::istream& input){
   /* Se lee la matriz, se le pasa directamente el puntero istream ya que debe leer
    * varias lineas */
   if(setMatriz(input)){
-	  return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
 }

@@ -44,32 +44,32 @@ Vector<T>::Vector(){
 template <typename T>
 Vector<T>::Vector(const size_t l){
   if(!l){
-	ptr = NULL;
-	size = 0;
+  ptr = NULL;
+  size = 0;
   }
   else{
     ptr = new T[l];
     size = l;
     
     for(size_t i = 0; i < size; i++){
-		ptr[i] = T();
-	}
+    ptr[i] = T();
+  }
   }
 }
 
 template <typename T>
 Vector<T>::Vector(const size_t l, const T& defecto){
   if(!l){
-	ptr = NULL;
-	size = 0;
+  ptr = NULL;
+  size = 0;
   }
   else{
     ptr = new T[l];
     size = l;
     
     for(size_t i = 0; i < size; i++){
-		ptr[i] = defecto;
-	}
+    ptr[i] = defecto;
+  }
   }
 }
 
@@ -105,14 +105,14 @@ T& Vector<T>::operator[](const size_t index) const {
 
 template <typename T>
 Vector<T>& Vector<T>::operator=(const Vector<T>& right){
-	if(*this == right)
-		return *this;
-	delete[] ptr;
-	if (!right.size) {
+  if(*this == right)
+    return *this;
+  delete[] ptr;
+  if (!right.size) {
       ptr = NULL;
       size = 0;
-	}
-	else {
+  }
+  else {
       size = right.size;
       ptr = new T[size];
 
@@ -125,93 +125,93 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& right){
 
 template <typename T>
 bool Vector<T>::operator==(const Vector<T>& right) const{
-	for(size_t i = 0; i < size; i++){
-		if(ptr[i] != right.ptr[i])
-			return false;
-	}
-	return true;
+  for(size_t i = 0; i < size; i++){
+    if(ptr[i] != right.ptr[i])
+      return false;
+  }
+  return true;
 }
 
 template <typename T>
 bool Vector<T>::operator!=(const Vector<T>& right) const{
-	for(size_t i = 0; i < size; i++){
-		if(ptr[i] != right.ptr[i])
-			return true;
-	}
-	return false;
+  for(size_t i = 0; i < size; i++){
+    if(ptr[i] != right.ptr[i])
+      return true;
+  }
+  return false;
 }
 
 template <typename T>
 void Vector<T>::resize(const size_t l){
-	if(l == size)
-		return;
-	T* old_ptr = ptr;
-	size_t old_size = size;
-	if(!l){
-		size = 0;
-		ptr = NULL;
-	}
-	else{
-		size = l;
-		T* new_ptr;
-		try{
-			new_ptr = new T[l];
-		}
-		catch(std::bad_alloc &err){
-			throw err;
-		}
-		ptr = new_ptr;
-		size_t i = 0;
-		for( ; i < l && i < old_size; i++){
-			ptr[i] = old_ptr[i];
-		}
-		for( ; i < l; i++){
-			ptr[i] = T();
-		}
-	}
-	delete[] old_ptr;
+  if(l == size)
+    return;
+  T* old_ptr = ptr;
+  size_t old_size = size;
+  if(!l){
+    size = 0;
+    ptr = NULL;
+  }
+  else{
+    size = l;
+    T* new_ptr;
+    try{
+      new_ptr = new T[l];
+    }
+    catch(std::bad_alloc &err){
+      throw err;
+    }
+    ptr = new_ptr;
+    size_t i = 0;
+    for( ; i < l && i < old_size; i++){
+      ptr[i] = old_ptr[i];
+    }
+    for( ; i < l; i++){
+      ptr[i] = T();
+    }
+  }
+  delete[] old_ptr;
 }
 
 
 template <typename T>
 void Vector<T>::resize(const size_t l, const T& def){
-	if(l == size)
-		return;
-	T* old_ptr = ptr;
-	size_t old_size = size;
-	if(!l){
-		size = 0;
-		ptr = NULL;
-	}
-	else{
-		size = l;
-		T* new_ptr;
-		try{
-			new_ptr = new T[l];
-		}
-		catch(std::bad_alloc &err){
-			throw err;
-		}
-		ptr = new_ptr;
-		size_t i = 0;
-		for( ; i < l && i < old_size; i++){
-			ptr[i] = old_ptr[i];
-		}
-		for( ; i < l; i++){
-			ptr[i] = T();
-		}
-	}
-	delete[] old_ptr;
+  if(l == size)
+    return;
+  T* old_ptr = ptr;
+  size_t old_size = size;
+  if(!l){
+    size = 0;
+    ptr = NULL;
+  }
+  else{
+    size = l;
+    T* new_ptr;
+    try{
+      new_ptr = new T[l];
+    }
+    catch(std::bad_alloc &err){
+      throw err;
+    }
+    ptr = new_ptr;
+    size_t i = 0;
+    for( ; i < l && i < old_size; i++){
+      ptr[i] = old_ptr[i];
+    }
+    for( ; i < l; i++){
+      ptr[i] = T();
+    }
+  }
+  delete[] old_ptr;
 }
 
 template <typename T>
 ostream& operator <<(ostream& os, const Vector<T>& vec){
-	if(!vec.size)
-		os << "Vector vacio";
-	for(size_t i = 0; i < vec.size; i++){
-		os << vec.ptr[i] << ' ';
-	}
-	return os;
+  if(!vec.size)
+    os << "Vector vacio";
+  for(size_t i = 0; i < vec.size; i++){
+    os << vec.ptr[i] << ' ';
+  }
+  return os;
 }
 
 #endif
