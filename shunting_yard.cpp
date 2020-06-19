@@ -31,7 +31,8 @@ lista<string> shuntingYard(string input){
     input = input.substr(input.find_first_not_of(SPACE));
     
     //Si es un numero se guarda en la cola de salida
-    if(input.find_first_of(CHARS_NUMBERS) == 0){
+    if(input.find_first_of(CHARS_NUMBERS) == 0 
+      || (input[0] == NEGATIVE_SYMBOL && (flags[FLAG_INICIO] || flags[FLAG_OPERADOR] || flags[FLAG_PARENTESIS] || flags[FLAG_FUNCION]))){
       if(flags[FLAG_NUMERO]){
         cerr << MSJ_ERROR_NUMEROS_SEG << endl;
         exit(EXIT_FAILURE);
@@ -40,6 +41,7 @@ lista<string> shuntingYard(string input){
       extraido = leerNumero(input);
       cola_salida.enqueue(extraido);
       input = input.substr(extraido.length());
+      cout << extraido << endl;
     }
     
 
@@ -153,7 +155,6 @@ lista<string> shuntingYard(string input){
     }
     cola_salida.enqueue(operador_top);
   }
-
   return cola_salida;
 }
 
@@ -183,7 +184,8 @@ string leerToken(const string& input, const string* vector, const size_t vector_
 
 
 string leerNumero(const string& input){
-  string numero = input.substr(0, input.find_first_not_of(CHARS_NUMBERS));
+  string numero;
+  numero += input.substr(0, input.find_first_not_of(CHARS_NUMBERS));
   return numero;
 }
 

@@ -6,6 +6,7 @@
 #include <string>
 #include <cstring>
 
+#define NEGATIVE_SYMBOL '-'
 #define SPACE " \t\v\f\r"
 #define CHARS_NUMBERS "0123456789."
 #define MSJ_ERROR_PARENTESIS "Error: parentesis no balanceados"
