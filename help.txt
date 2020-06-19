@@ -5,6 +5,6 @@ Uso:
 -i --input inputstream [si no se especifica o '-' sera cin]
 -o --output outputstream [si no se especifica o '-' sera cout]
 -f --funcion [la funcion debe tener la forma f(z), disponibles:
-	sin, cos, ln, exp, sinh, cosh, re, im, phase, abs, conj
-	Se dispone ademas de los operadores: +,-,*,\,^ ]
+	sin, cos, ln, exp, sinh, cosh, re, im, phase, abs, conj,
+	arctan, ~. Se dispone ademas de los operadores: +,-,*,\,^]
 
