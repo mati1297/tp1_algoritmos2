@@ -116,12 +116,9 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
         } // Se aceptan tanto j como i como variable compleja
         else if ((str_aux == "j")||(str_aux == "i")) {
           pila_aux.push(complejo(0,1));
-        } // Veo si es un operador (largo 1) o '~'
-        else if (str_aux.length() == 1){
-          evaluar_operador(str_aux, pila_aux);
-        } // Si no es nada de lo anterior, al ya estar validado, es una funcion
+        } // Evaluar en operador o funcion
         else {
-          evaluar_funcion(str_aux, pila_aux);
+          evaluar_token(str_aux, pila_aux);
         }
 
         // Avanzo al iterador
@@ -145,6 +142,19 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
   return imagen_aux;
 }
 
+void Imagen::evaluar_token(const string & string_aux, lista<complejo> & pila_complejos) const {
+  // Si es '~' se multiplica por menos uno el valor
+  if (string_aux == "~") {
+    pila_complejos.push(pila_complejos.pop() * (-1));
+  }else if (string_aux.length() == 1) {
+    evaluar_operador(string_aux, pila_complejos);
+  } else {
+    evaluar_funcion(string_aux, pila_complejos);
+  }
+}
+
+
+
 void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_complejos) const {
   if (string_aux == "+") {
     pila_complejos.push(pila_complejos.pop()+pila_complejos.pop());
@@ -156,8 +166,7 @@ void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_
     pila_complejos.push(pila_complejos.pop()/pila_complejos.pop());
   } else if (string_aux == "^") {
     pila_complejos.push(pila_complejos.pop()^pila_complejos.pop());
-  } else if (string_aux == "~") // Si es '~' se multiplica por menos uno el valor
-    pila_complejos.push(pila_complejos.pop() * (-1));
+  }
 }
 
 void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_complejos) const {

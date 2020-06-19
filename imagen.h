@@ -74,6 +74,11 @@ private:
   deja en al pila */
   void evaluar_funcion(const string &, lista<complejo> &) const;
 
+  /* Recibe una pila& de complejos y evalua un token recibido por const string &
+  mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo
+  deja en al pila */
+  void evaluar_token(const string &, lista<complejo> &) const;
+
 public:
   /*Constructor por defecto del objeto Imagen.
   * Los valores por defecto estan definidos por las macros
