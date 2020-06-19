@@ -29,10 +29,10 @@ lista<string> shuntingYard(string input){
   //Mientras haya caracteres para leer.
   while(input.find_first_not_of(SPACE) != std::string::npos){
     input = input.substr(input.find_first_not_of(SPACE));
-    
+   
+     
     //Si es un numero se guarda en la cola de salida
-    if(input.find_first_of(CHARS_NUMBERS) == 0 
-      || (input[0] == NEGATIVE_SYMBOL && (flags[FLAG_INICIO] || flags[FLAG_OPERADOR] || flags[FLAG_PARENTESIS] || flags[FLAG_FUNCION]))){
+    if(input.find_first_of(CHARS_NUMBERS) == 0){
       if(flags[FLAG_NUMERO]){
         cerr << MSJ_ERROR_NUMEROS_SEG << endl;
         exit(EXIT_FAILURE);
@@ -41,7 +41,6 @@ lista<string> shuntingYard(string input){
       extraido = leerNumero(input);
       cola_salida.enqueue(extraido);
       input = input.substr(extraido.length());
-      cout << extraido << endl;
     }
     
 
@@ -55,6 +54,19 @@ lista<string> shuntingYard(string input){
       pila_operadores.push(extraido);
       input = input.substr(extraido.length());
     }
+
+	//Si es un caracter especial tambien se reconoce como numero y se
+    //guarda en la cola de salida.
+    else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
+      if(flags[FLAG_NUMERO]){
+        cerr << MSJ_ERROR_NUMEROS_SEG << endl;
+        exit(EXIT_FAILURE);
+      }
+      subirFlag(flags, FLAG_NUMERO);
+      cola_salida.enqueue(extraido);
+      input = input.substr(extraido.length());
+    }
+
 
     //Si es un operador se guarda en la pila de operadores una vez que se haya chequeado
     //que no hay otros operadores esperando en la lista que deben ir antes del extraido.
@@ -89,17 +101,7 @@ lista<string> shuntingYard(string input){
     }
     
     
-    //Si es un caracter especial tambien se reconoce como numero y se
-    //guarda en la cola de salida.
-    else if(!(extraido = leerToken(input, caracteresEspecial, CARACTERES_ESPECIAL_CANT)).empty()){
-      if(flags[FLAG_NUMERO]){
-        cerr << MSJ_ERROR_NUMEROS_SEG << endl;
-        exit(EXIT_FAILURE);
-      }
-      subirFlag(flags, FLAG_NUMERO);
-      cola_salida.enqueue(extraido);
-      input = input.substr(extraido.length());
-    }
+
 
     //Si es un parentesis izquierdo se guarda en la pila.
     else if(!input.compare(0, 1, LEFT_SEPARATOR_OP)){
@@ -135,6 +137,7 @@ lista<string> shuntingYard(string input){
       cerr << MSJ_ERROR_OPERADOR_DESC << endl;
       exit(EXIT_FAILURE);
     }
+    
   }
 
   if(flags[FLAG_OPERADOR]){
@@ -155,6 +158,7 @@ lista<string> shuntingYard(string input){
     }
     cola_salida.enqueue(operador_top);
   }
+  cout << cola_salida << endl;
   return cola_salida;
 }
 
@@ -184,8 +188,7 @@ string leerToken(const string& input, const string* vector, const size_t vector_
 
 
 string leerNumero(const string& input){
-  string numero;
-  numero += input.substr(0, input.find_first_not_of(CHARS_NUMBERS));
+  string numero = input.substr(0, input.find_first_not_of(CHARS_NUMBERS));
   return numero;
 }
 
@@ -215,12 +218,16 @@ void cargarVectorFunciones(string *funciones){
   funciones[9] = "cos";
   funciones[10] = "conj";
   funciones[11] = "arctan";
+  funciones[12] = "~";
 }
 
 void cargarVectorCaracteresEspecial(string *caracteresEspecial){
   caracteresEspecial[0] = "j";
   caracteresEspecial[1] = "i";
   caracteresEspecial[2] = "z";
+  caracteresEspecial[3] = "-j";
+  caracteresEspecial[4] = "-i";
+  caracteresEspecial[5] = "-z";
 }
 
 

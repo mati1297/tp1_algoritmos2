@@ -123,7 +123,6 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
         else {
           evaluar_funcion(str_aux, pila_aux);
         }
-      }
 
         // Avanzo al iterador
         iter = iter.avanzar();
@@ -158,7 +157,7 @@ void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_
   } else if (string_aux == "^") {
     pila_complejos.push(pila_complejos.pop()^pila_complejos.pop());
   } else if (string_aux == "~") // Si es '~' se multiplica por menos uno el valor
-    pila_complejos.push(-pila_complejos.pop());
+    pila_complejos.push(pila_complejos.pop() * (-1));
 }
 
 void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_complejos) const {
