@@ -109,14 +109,14 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
         str_aux = iter.dato();
 
         // Veo si es negativo (empieza con un '-' y es de largo mayor a uno)
-        if ((str_aux[0] == '-') && (str_aux > 1)) {
+        if ((str_aux[0] == '-') && (str_aux.length() > 1)) {
           if (isdigit(str_aux[1]) || (str_aux[1] == '.')) {
             pila_aux.push(complejo(stod(str_aux),0));
           }
-          else if (str_aux[1] == "z") {
+          else if (str_aux[1] == 'z') {
             pila_aux.push(complejo(-x,-y));
           } // Se aceptan tanto j como i como variable compleja
-          else if ((str_aux[1] == "j")||(str_aux[1] == "i")) {
+          else if ((str_aux[1] == 'j')||(str_aux[1] == 'i')) {
             pila_aux.push(complejo(0,-1));
           }
         }
