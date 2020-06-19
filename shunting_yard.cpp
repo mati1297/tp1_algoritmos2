@@ -158,7 +158,6 @@ lista<string> shuntingYard(string input){
     }
     cola_salida.enqueue(operador_top);
   }
-  cout << cola_salida << endl;
   return cola_salida;
 }
 
