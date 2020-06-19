@@ -64,15 +64,15 @@ private:
   /*Actualiza el tamaño de la matriz al tamaño actual que indica los atributos columnas y filas*/
   int resizeMatriz();
 
-  /* Recibe una pila& de complejos y evalua un operador recibido por const string &
+  /* Recibe una pila& de complejos y evalua un token de un caracter recibido por const string &
   mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo
   deja en al pila */
-  void evaluar_operador(const string &, lista<complejo> &) const;
+  void evaluar_token_un_caracter(const string &, lista<complejo> &) const;
 
-  /* Recibe una pila& de complejos y evalua una funcion recibido por const string &
+  /* Recibe una pila& de complejos y evalua un token de mas de un caracter recibido por const string &
   mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo
   deja en al pila */
-  void evaluar_funcion(const string &, lista<complejo> &) const;
+  void evaluar_token_multiple_caracter(const string &, lista<complejo> &) const;
 
   /* Recibe una pila& de complejos y evalua un token recibido por const string &
   mediante el algoritmo de evaluacion de Reverse Polish Notation el resultado lo

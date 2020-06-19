@@ -144,18 +144,15 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
 
 void Imagen::evaluar_token(const string & string_aux, lista<complejo> & pila_complejos) const {
   // Si es '~' se multiplica por menos uno el valor
-  if (string_aux == "~") {
-    pila_complejos.push(pila_complejos.pop() * (-1));
-  }else if (string_aux.length() == 1) {
-    evaluar_operador(string_aux, pila_complejos);
+  if (string_aux.length() == 1) {
+    evaluar_token_un_caracter(string_aux, pila_complejos);
   } else {
-    evaluar_funcion(string_aux, pila_complejos);
+    evaluar_token_multiple_caracter(string_aux, pila_complejos);
   }
 }
 
 
-
-void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_complejos) const {
+void Imagen::evaluar_token_un_caracter(const string & string_aux, lista<complejo> & pila_complejos) const {
   if (string_aux == "+") {
     pila_complejos.push(pila_complejos.pop()+pila_complejos.pop());
   } else if (string_aux == "-") {
@@ -166,10 +163,12 @@ void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_
     pila_complejos.push(pila_complejos.pop()/pila_complejos.pop());
   } else if (string_aux == "^") {
     pila_complejos.push(pila_complejos.pop()^pila_complejos.pop());
+  } else if (string_aux == "~") {
+    pila_complejos.push(pila_complejos.pop() * (-1));
   }
 }
 
-void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_complejos) const {
+void Imagen::evaluar_token_multiple_caracter(const string & string_aux, lista<complejo> & pila_complejos) const {
   if (string_aux == "abs") {
     pila_complejos.push(pila_complejos.pop().modulo());
   }
