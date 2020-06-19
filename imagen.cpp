@@ -103,25 +103,41 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
       iter = funcion_ordenada.primero();
 
       // realizo el algoritmo de evaluacion con la funcion dada por la lista
-      // El dato puede ser 'z' 'j' (o 'i') 'numero' 'operador' o 'funcion'
+      // El dato puede ser 'z' 'j' (o 'i'), '-z', '-j' '-i'
+      // 'numero' 'operador' o 'funcion',
       while (iter.extremo() != true) {
         str_aux = iter.dato();
 
-        if (isdigit(str_aux[0]) || (str_aux[0] == '.')) {
-          pila_aux.push(complejo(stod(str_aux),0));
+        // Veo si es negativo (empieza con un '-' y es de largo mayor a uno)
+        if ((str_aux[0] == '-') && (str_aux > 1)) {
+          if (isdigit(str_aux[1]) || (str_aux[1] == '.')) {
+            pila_aux.push(complejo(stod(str_aux),0));
+          }
+          else if (str_aux[1] == "z") {
+            pila_aux.push(complejo(-x,-y));
+          } // Se aceptan tanto j como i como variable compleja
+          else if ((str_aux[1] == "j")||(str_aux[1] == "i")) {
+            pila_aux.push(complejo(0,-1));
+          }
         }
-        else if (str_aux == "z") {
-          pila_aux.push(complejo(x,y));
-        } // Se aceptan tanto j como i como variable compleja
-        else if ((str_aux == "j")||(str_aux == "i")) {
-          pila_aux.push(complejo(0,1));
-        } // Veo si es un operador (largo 1)
-        else if (str_aux.length() == 1){
-          evaluar_operador(str_aux, pila_aux);
-        } // Si no es nada de lo anterior, al ya estar validado, es una funcion
         else {
-          evaluar_funcion(str_aux, pila_aux);
+          if (isdigit(str_aux[0]) || (str_aux[0] == '.')) {
+            pila_aux.push(complejo(stod(str_aux),0));
+          }
+          else if (str_aux == "z") {
+            pila_aux.push(complejo(x,y));
+          } // Se aceptan tanto j como i como variable compleja
+          else if ((str_aux == "j")||(str_aux == "i")) {
+            pila_aux.push(complejo(0,1));
+          } // Veo si es un operador (largo 1)
+          else if (str_aux.length() == 1){
+            evaluar_operador(str_aux, pila_aux);
+          } // Si no es nada de lo anterior, al ya estar validado, es una funcion
+          else {
+            evaluar_funcion(str_aux, pila_aux);
+          }
         }
+
         // Avanzo al iterador
         iter = iter.avanzar();
       } // fin del while
