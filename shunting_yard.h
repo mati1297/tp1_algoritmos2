@@ -31,7 +31,7 @@
 
 #define OPERADORES_CANT 5
 #define FUNCIONES_CANT 13
-#define CARACTERES_ESPECIAL_CANT 6
+#define CARACTERES_ESPECIAL_CANT 3
 
 /*Metodo principal, se le pasa una cadena con la funcion infix, y devuelve
  * una lista con las funciones, operadores y operandos validados y en 

@@ -224,9 +224,6 @@ void cargarVectorCaracteresEspecial(string *caracteresEspecial){
   caracteresEspecial[0] = "j";
   caracteresEspecial[1] = "i";
   caracteresEspecial[2] = "z";
-  caracteresEspecial[3] = "-j";
-  caracteresEspecial[4] = "-i";
-  caracteresEspecial[5] = "-z";
 }
 
 
