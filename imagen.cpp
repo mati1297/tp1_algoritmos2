@@ -108,35 +108,22 @@ Imagen Imagen::transformar(const lista<string> funcion_ordenada) const{
       while (iter.extremo() != true) {
         str_aux = iter.dato();
 
-        // Veo si es negativo (empieza con un '-' y es de largo mayor a uno)
-        if ((str_aux[0] == '-') && (str_aux.length() > 1)) {
-          if (isdigit(str_aux[1]) || (str_aux[1] == '.')) {
-            pila_aux.push(complejo(stod(str_aux),0));
-          }
-          else if (str_aux[1] == 'z') {
-            pila_aux.push(complejo(-x,-y));
-          } // Se aceptan tanto j como i como variable compleja
-          else if ((str_aux[1] == 'j')||(str_aux[1] == 'i')) {
-            pila_aux.push(complejo(0,-1));
-          }
+        if (isdigit(str_aux[0]) || (str_aux[0] == '.')) {
+          pila_aux.push(complejo(stod(str_aux),0));
         }
+        else if (str_aux == "z") {
+          pila_aux.push(complejo(x,y));
+        } // Se aceptan tanto j como i como variable compleja
+        else if ((str_aux == "j")||(str_aux == "i")) {
+          pila_aux.push(complejo(0,1));
+        } // Veo si es un operador (largo 1)
+        else if (str_aux.length() == 1){
+          evaluar_operador(str_aux, pila_aux);
+        } // Si no es nada de lo anterior, al ya estar validado, es una funcion
         else {
-          if (isdigit(str_aux[0]) || (str_aux[0] == '.')) {
-            pila_aux.push(complejo(stod(str_aux),0));
-          }
-          else if (str_aux == "z") {
-            pila_aux.push(complejo(x,y));
-          } // Se aceptan tanto j como i como variable compleja
-          else if ((str_aux == "j")||(str_aux == "i")) {
-            pila_aux.push(complejo(0,1));
-          } // Veo si es un operador (largo 1)
-          else if (str_aux.length() == 1){
-            evaluar_operador(str_aux, pila_aux);
-          } // Si no es nada de lo anterior, al ya estar validado, es una funcion
-          else {
-            evaluar_funcion(str_aux, pila_aux);
-          }
+          evaluar_funcion(str_aux, pila_aux);
         }
+      }
 
         // Avanzo al iterador
         iter = iter.avanzar();
@@ -170,7 +157,8 @@ void Imagen::evaluar_operador(const string & string_aux, lista<complejo> & pila_
     pila_complejos.push(pila_complejos.pop()/pila_complejos.pop());
   } else if (string_aux == "^") {
     pila_complejos.push(pila_complejos.pop()^pila_complejos.pop());
-  }
+  } else if (string_aux == "~")
+    pila_complejos.push(-pila_complejos.pop());
 }
 
 void Imagen::evaluar_funcion(const string & string_aux, lista<complejo> & pila_complejos) const {
