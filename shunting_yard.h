@@ -21,6 +21,7 @@
 #define MSJ_ERROR_NUMERO_FUNC_SEG "Error: un numero no puede estar seguido de una funcion"
 #define MSJ_ERROR_PARENTESIS_VACIOS "Error: parentesis vacios"
 #define MSJ_ERROR_OPERADOR_INICIO "Error: la función empieza con un operador"
+#define MSJ_ERROR_PARENTESIS_OPERADOR "Error: parentesis seguido de operador"
 
 #define FLAG_INICIO 0
 #define FLAG_OPERADOR 1

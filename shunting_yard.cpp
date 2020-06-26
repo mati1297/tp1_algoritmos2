@@ -83,6 +83,10 @@ lista<string> shuntingYard(string input){
         cerr << MSJ_ERROR_OPERADOR_INICIO << endl;
         exit(EXIT_FAILURE);
       }
+      if(flags[FLAG_PARENTESIS]){
+		 cerr << MSJ_ERROR_PARENTESIS_OPERADOR << endl;
+		 exit(EXIT_FAILURE);
+	  }
       subirFlag(flags, FLAG_OPERADOR);
 
       while(pila_operadores.llena()){
