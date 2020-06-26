@@ -105,7 +105,8 @@ lista<string> shuntingYard(string input){
 
     //Si es un parentesis izquierdo se guarda en la pila.
     else if(!input.compare(0, 1, LEFT_SEPARATOR_OP)){
-      subirFlag(flags, FLAG_PARENTESIS);
+      flags[FLAG_PARENTESIS] = true;
+      flags[FLAG_FUNCION] = false;
       string operador_insertar(1, input[0]);
       pila_operadores.push(operador_insertar);
       input = input.substr(1);
